@@ -5,8 +5,9 @@ import starlight from '@astrojs/starlight';
 // Official website for svg-engine (Astro + Starlight).
 // Product facts must be cross-checked against the library source before release.
 export default defineConfig({
-  // TODO: set the final production domain before publishing (affects sitemap/OG/canonical).
+  // GitHub Pages project site: https://mosaicoo.github.io/svgengine-site/
   site: 'https://mosaicoo.github.io',
+  base: '/svgengine-site',
   integrations: [
     starlight({
       title: 'svg-engine',
