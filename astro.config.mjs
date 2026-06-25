@@ -24,7 +24,7 @@ export default defineConfig({
         },
       ],
       editLink: {
-        baseUrl: 'https://github.com/mosaicoo/svg-engine-site/edit/main/',
+        baseUrl: 'https://github.com/mosaicoo/svgengine-site/edit/main/',
       },
       sidebar: [
         {
