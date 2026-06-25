@@ -5,7 +5,7 @@ template: splash
 hero:
   tagline: The embeddable SVG editor for Angular — headless on the inside, professional on the outside.
   actions:
-    - text: Getting started
+    - text: Get started
       link: /svgengine-site/guides/getting-started/
       icon: right-arrow
       variant: primary
@@ -15,7 +15,15 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkButton, Badge } from '@astrojs/starlight/components';
+
+<div class="hero-badges">
+  <Badge text="Angular v21" variant="note" size="medium" />
+  <Badge text="Headless-first" variant="tip" size="medium" />
+  <Badge text="9 entry points" variant="default" size="medium" />
+  <Badge text="Apache-2.0" variant="success" size="medium" />
+  <Badge text="pre-1.0" variant="caution" size="medium" />
+</div>
 
 ## Why svg-engine?
 
@@ -44,8 +52,88 @@ points**. You compose only what your app needs.
   </Card>
 </CardGrid>
 
-:::note[Work in progress]
-This site is in its initial scaffold. Product figures (version, test count,
-entry points, performance) will be filled in from the library source and
-verified before release.
-:::
+## Compose only what you need
+
+Each secondary entry point is independent and lazy-loadable. Consuming `core`
+does **not** pull in rendering, editing, UI or the AI layer.
+
+| Layer | Entry points | Material UI |
+| --- | --- | --- |
+| Headless core | `core` · `render` · `io` · `optimize` · `edit` | No |
+| Professional UI | `ui` | Opt-in |
+| AI (opt-in) | `ai/nlu` · `ai/nlu-ui` · `ai/nlu-voice-wasm` | Partial |
+
+<LinkButton href="/svgengine-site/reference/entry-points/" variant="secondary" icon="right-arrow" iconPlacement="end">
+  See all entry points
+</LinkButton>
+
+## A professional editing surface
+
+The optional editor reaches a feature set comparable to desktop vector tools —
+all built on the same headless engine.
+
+<CardGrid>
+  <Card title="Draw">
+    Select / Direct-Select, Pen and Pencil, shape tools, rich-text (variable
+    fonts, text-on-path), plus Eyedropper, Knife, Width and Symbol Sprayer.
+  </Card>
+  <Card title="Edit geometry">
+    Path/Anchor editor (cusp / smooth / symmetric), Pathfinder boolean ops, path
+    operations (simplify / join / outline stroke / offset), live corners and
+    compound paths.
+  </Card>
+  <Card title="Compose documents">
+    Pages / artboards, layers, Smart Objects, symbols and instances, version
+    snapshots, auto-save and recovery.
+  </Card>
+  <Card title="Style">
+    Non-destructive, chainable effects and filters, gradients with an inline
+    editor, patterns, and a libraries system (shapes, palettes, gradients,
+    patterns, symbols, brushes, graphic styles, templates).
+  </Card>
+  <Card title="Stay productive">
+    Find &amp; Replace, align / distribute, customizable keyboard shortcuts,
+    auto-trace (raster → vector), code generators, per-asset export and an
+    animation timeline.
+  </Card>
+  <Card title="Command by voice (opt-in)">
+    Natural-language command input and on-device speech-to-text (Whisper) —
+    fully optional and decoupled from the editor core.
+  </Card>
+</CardGrid>
+
+## Architectural guarantees
+
+<CardGrid>
+  <Card title="Headless boundary">
+    `core`, `render`, `io`, `optimize` and `edit` have **zero** dependency on
+    `@angular/material` or `@angular/cdk`. Material lives only in `ui`.
+  </Card>
+  <Card title="Immutable model">
+    Every mutation produces a new tree (structural sharing). Undo is a snapshot
+    and replay, not a fragile delta system.
+  </Card>
+  <Card title="Command pattern">
+    Every mutation routes through a single `CommandBus`, so undo/redo comes for
+    free and stays consistent.
+  </Card>
+  <Card title="OnPush everywhere">
+    Every component uses `ChangeDetectionStrategy.OnPush`; reactive state is
+    `signal`/`computed`, with no Subjects in the public API.
+  </Card>
+</CardGrid>
+
+## Get started
+
+```bash
+npm install svg-engine @angular/core@^21
+```
+
+<div class="cta-row">
+  <LinkButton href="/svgengine-site/guides/getting-started/" variant="primary" icon="right-arrow" iconPlacement="end">
+    Read the guide
+  </LinkButton>
+  <LinkButton href="https://github.com/mosaicoo/svg-engine" variant="minimal" icon="external" iconPlacement="end">
+    Star on GitHub
+  </LinkButton>
+</div>
