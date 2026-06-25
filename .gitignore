@@ -1,0 +1,28 @@
+# build output
+dist/
+.output/
+
+# dependencies
+node_modules/
+
+# astro
+.astro/
+
+# logs
+*.log
+npm-debug.log*
+
+# environment
+.env
+.env.production
+.env.*.local
+
+# editor / os
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+
+# local agent config (contains machine-local absolute paths — not for the public repo)
+.claude/
+CLAUDE.md

@@ -1,0 +1,51 @@
+---
+title: svg-engine
+description: Embeddable, headless-first SVG editor for Angular v21. Render, manipulate and optimize SVG — import only what you need.
+template: splash
+hero:
+  tagline: The embeddable SVG editor for Angular — headless on the inside, professional on the outside.
+  actions:
+    - text: Getting started
+      link: /guides/getting-started/
+      icon: right-arrow
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/mosaicoo/svg-engine
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Why svg-engine?
+
+Most SVG libraries either ship as a **black-box widget** (hard to extend, drags
+its own UI stack) or as a **pure parser/serializer** (no editing, no rendering,
+no UX). svg-engine sits in the middle: a **plugin-extensible editor core** where
+the model, rendering, editing services and Material UI are **separate entry
+points**. You compose only what your app needs.
+
+<CardGrid>
+  <Card title="Headless-first" icon="puzzle">
+    The core does not depend on Angular Material. The professional UI is opt-in
+    and replaceable by your app.
+  </Card>
+  <Card title="Import only what you need" icon="rocket">
+    Independent, lazy-loadable entry points — from a minimal viewer to a full
+    editor.
+  </Card>
+  <Card title="Immutable model + signals" icon="approve-check">
+    Reactive state with `signal`/`computed`; every mutation produces a new tree.
+    Automatic undo via the Command pattern.
+  </Card>
+  <Card title="Extensible via plugins" icon="setting">
+    Plugin categories for renderers, tools, importers/exporters, effects,
+    palettes, menus and more — no core fork required.
+  </Card>
+</CardGrid>
+
+:::note[Work in progress]
+This site is in its initial scaffold. Product figures (version, test count,
+entry points, performance) will be filled in from the library source and
+verified before release.
+:::
