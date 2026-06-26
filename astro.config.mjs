@@ -38,7 +38,11 @@ export default defineConfig({
         },
         {
           label: 'Concepts',
-          items: [{ label: 'Entry points', slug: 'reference/entry-points' }],
+          items: [
+            { label: 'Architecture', slug: 'guides/architecture' },
+            { label: 'Entry points', slug: 'reference/entry-points' },
+            { label: 'Plugins', slug: 'guides/plugins' },
+          ],
         },
       ],
     }),
