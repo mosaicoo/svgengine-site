@@ -20,3 +20,21 @@
 .sl-markdown-content h2 {
   margin-top: 3rem;
 }
+
+/* Embedded live demo (iframe) */
+.demo-frame {
+  display: block;
+  width: 100%;
+  height: min(80vh, 880px);
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  background: var(--sl-color-bg);
+}
+
+.demo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}

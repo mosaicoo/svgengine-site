@@ -28,6 +28,7 @@ export default defineConfig({
         baseUrl: 'https://github.com/mosaicoo/svgengine-site/edit/main/',
       },
       sidebar: [
+        { label: 'Live demo', slug: 'demo' },
         {
           label: 'Start here',
           items: [

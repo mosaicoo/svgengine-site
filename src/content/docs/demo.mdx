@@ -1,0 +1,28 @@
+---
+title: Live demo
+description: Try svg-engine in your browser — a full, live editor running on the library.
+template: splash
+---
+
+import { LinkButton } from '@astrojs/starlight/components';
+
+Try the full editor right here — it runs on `@mosaicoo/svg-engine`. For the best
+experience, open it in its own tab.
+
+<div class="demo-actions">
+  <LinkButton href="https://svgstudio.mosaicoo.tech/" target="_blank" variant="primary" icon="external" iconPlacement="end">
+    Open in a new tab
+  </LinkButton>
+  <LinkButton href="/svgengine-site/guides/getting-started/" variant="minimal" icon="right-arrow" iconPlacement="end">
+    Get started
+  </LinkButton>
+</div>
+
+<iframe
+  class="demo-frame"
+  src="https://svgstudio.mosaicoo.tech/"
+  title="svg-engine live editor"
+  loading="lazy"
+  allow="clipboard-write; microphone"
+  referrerpolicy="no-referrer"
+></iframe>
