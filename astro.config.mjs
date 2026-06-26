@@ -32,6 +32,7 @@ export default defineConfig({
           label: 'Start here',
           items: [
             { label: 'Overview', slug: 'guides/overview' },
+            { label: 'Features', slug: 'guides/features' },
             { label: 'Getting started', slug: 'guides/getting-started' },
           ],
         },
