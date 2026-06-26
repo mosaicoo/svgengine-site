@@ -5,7 +5,9 @@ documentation portal.
 
 > This repository contains the **website**, not the library itself.
 > The svg-engine library lives at
-> [github.com/mosaicoo/svg-engine](https://github.com/mosaicoo/svg-engine).
+> [github.com/mosaicoo/svg-engine](https://github.com/mosaicoo/svg-engine)
+> and is published on npm as
+> [`@mosaicoo/svg-engine`](https://www.npmjs.com/package/@mosaicoo/svg-engine).
 
 Built with [Astro](https://astro.build) and
 [Starlight](https://starlight.astro.build) — a static site, optimized for

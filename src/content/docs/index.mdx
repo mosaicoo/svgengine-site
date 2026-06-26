@@ -13,6 +13,10 @@ hero:
       link: https://github.com/mosaicoo/svg-engine
       icon: external
       variant: minimal
+    - text: View on npm
+      link: https://www.npmjs.com/package/@mosaicoo/svg-engine
+      icon: external
+      variant: minimal
 ---
 
 import { Card, CardGrid, LinkButton, Badge } from '@astrojs/starlight/components';
@@ -54,8 +58,9 @@ points**. You compose only what your app needs.
 
 ## Compose only what you need
 
-Each secondary entry point is independent and lazy-loadable. Consuming `core`
-does **not** pull in rendering, editing, UI or the AI layer.
+The library ships as the scoped package `@mosaicoo/svg-engine`; each secondary
+entry point (`@mosaicoo/svg-engine/<name>`) is independent and lazy-loadable.
+Consuming `core` does **not** pull in rendering, editing, UI or the AI layer.
 
 | Layer | Entry points | Material UI |
 | --- | --- | --- |
@@ -125,13 +130,18 @@ all built on the same headless engine.
 
 ## Get started
 
+Published on npm as the scoped package **`@mosaicoo/svg-engine`**:
+
 ```bash
-npm install svg-engine @angular/core@^21
+npm install @mosaicoo/svg-engine @angular/core@^21
 ```
 
 <div class="cta-row">
   <LinkButton href="/svgengine-site/guides/getting-started/" variant="primary" icon="right-arrow" iconPlacement="end">
     Read the guide
+  </LinkButton>
+  <LinkButton href="https://www.npmjs.com/package/@mosaicoo/svg-engine" variant="secondary" icon="external" iconPlacement="end">
+    View on npm
   </LinkButton>
   <LinkButton href="https://github.com/mosaicoo/svg-engine" variant="minimal" icon="external" iconPlacement="end">
     Star on GitHub

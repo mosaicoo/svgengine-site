@@ -5,11 +5,13 @@ description: Install svg-engine and render your first SVG.
 
 ## Installation
 
+The library is published on npm as the scoped package `@mosaicoo/svg-engine`:
+
 ```bash
-npm install svg-engine @angular/core@^21
+npm install @mosaicoo/svg-engine @angular/core@^21
 ```
 
-UI peer dependencies (only if you consume `svg-engine/ui`):
+UI peer dependencies (only if you consume `@mosaicoo/svg-engine/ui`):
 
 ```bash
 npm install @angular/material@^21 @angular/cdk@^21
@@ -19,8 +21,8 @@ npm install @angular/material@^21 @angular/cdk@^21
 
 ```ts
 import { Component } from '@angular/core';
-import { SvgeRenderer } from 'svg-engine/render';
-import { createRect, createGroup, type SvgDocument } from 'svg-engine/core';
+import { SvgeRenderer } from '@mosaicoo/svg-engine/render';
+import { createRect, createGroup, type SvgDocument } from '@mosaicoo/svg-engine/core';
 
 @Component({
   standalone: true,
@@ -38,7 +40,8 @@ export class MyViewer {
 }
 ```
 
-:::note[Draft]
-This example is taken from the product README. Before release, re-validate it
-against the current API surface (library `docs/09-api-publica.md` + source).
+:::note
+This is a read-only renderer — no Material UI and no editing services are
+loaded. The full public API is documented in the library repository
+(`docs/09-api-publica.md`).
 :::
