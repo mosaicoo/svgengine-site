@@ -5,6 +5,7 @@ template: splash
 ---
 
 import { LinkButton } from '@astrojs/starlight/components';
+import DemoEmbed from '../../components/DemoEmbed.astro';
 
 Try the full editor right here — it runs on `@mosaicoo/svg-engine`. For the best
 experience, open it in its own tab.
@@ -18,11 +19,4 @@ experience, open it in its own tab.
   </LinkButton>
 </div>
 
-<iframe
-  class="demo-frame"
-  src="https://svgstudio.mosaicoo.tech/"
-  title="svg-engine live editor"
-  loading="lazy"
-  allow="clipboard-write; microphone"
-  referrerpolicy="no-referrer"
-></iframe>
+<DemoEmbed />

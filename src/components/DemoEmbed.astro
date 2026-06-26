@@ -1,0 +1,31 @@
+---
+// Embeds the hosted svg-studio editor with a loading skeleton.
+const src = 'https://svgstudio.mosaicoo.tech/';
+---
+
+<div class="demo-stage" data-demo-stage>
+  <div class="demo-skeleton">
+    <div class="demo-spinner"></div>
+    <p>Loading the editor…</p>
+  </div>
+  <iframe
+    class="demo-frame"
+    id="demo-frame"
+    src={src}
+    title="svg-engine live editor"
+    loading="lazy"
+    allow="clipboard-write; microphone"
+    referrerpolicy="no-referrer"></iframe>
+</div>
+
+<script>
+  const stage = document.querySelector('[data-demo-stage]');
+  const frame = document.getElementById('demo-frame');
+  if (stage && frame) {
+    const reveal = () => stage.classList.add('is-loaded');
+    frame.addEventListener('load', reveal);
+    // The SPA is cross-origin, so we can't detect "fully ready".
+    // Reveal anyway after a few seconds in case the load event was missed.
+    setTimeout(reveal, 8000);
+  }
+</script>
