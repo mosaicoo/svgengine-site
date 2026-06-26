@@ -20,8 +20,7 @@ replaceable by the consumer.
 - Teams with accessibility and privacy requirements.
 - Open-source contributors (plugin authors).
 
-:::caution[Draft]
-Specific figures (version, test counts, exact feature list) should be derived
-from the product repository and verified before release. This text describes
-positioning only and intentionally fixes no metrics.
+:::tip[Next]
+Ready to try it? Head to [Getting started](/svgengine-site/guides/getting-started/),
+or browse the [Entry points](/svgengine-site/reference/entry-points/).
 :::

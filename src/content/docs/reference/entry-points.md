@@ -26,5 +26,6 @@ The headless boundary guarantees that `core`, `render`, `io`, `optimize` and
 :::note
 The library is published on npm as
 [`@mosaicoo/svg-engine`](https://www.npmjs.com/package/@mosaicoo/svg-engine).
-Public surface details live in the library's `docs/09-api-publica.md`.
+Full public-API details are in the
+[library repository](https://github.com/mosaicoo/svg-engine).
 :::

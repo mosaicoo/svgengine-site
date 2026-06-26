@@ -3,7 +3,6 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 // Official website for svg-engine (Astro + Starlight).
-// Product facts must be cross-checked against the library source before release.
 export default defineConfig({
   // GitHub Pages project site: https://mosaicoo.github.io/svgengine-site/
   site: 'https://mosaicoo.github.io',

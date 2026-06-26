@@ -9,8 +9,7 @@ consume exactly the layer you need, with real tree-shaking.
 
 ## The headless boundary
 
-The central rule (referred to as **D-017** in the source) is that the headless
-layers never depend on a UI toolkit:
+The central rule is that the headless layers never depend on a UI toolkit:
 
 - `core`, `render`, `io`, `optimize`, `edit` and `ai/nlu` have **zero**
   dependency on `@angular/material` or `@angular/cdk`.
@@ -63,7 +62,7 @@ working independently):
 - **Tree-shakeable surface.** Each entry point exposes a single `public-api`;
   internals never leak.
 
-## Registries as the source of truth
+## How functionality is registered
 
 Inside `edit`, **capability registries** (tools, menus, shortcuts, palettes,
 effects, …) hold the editor's functionality. Components in `ui` only **read**
@@ -72,7 +71,8 @@ of tools or menu items — everything appears through dynamic registration. This
 the foundation of the [plugin system](/svgengine-site/guides/plugins/).
 
 :::note
-For the full dependency graph and a per-entry-point breakdown, see the library's
-`docs/02-arquitetura.md`, and the [Entry points](/svgengine-site/reference/entry-points/)
-reference here.
+See the [Entry points](/svgengine-site/reference/entry-points/) reference for a
+per-entry-point breakdown, and the
+[library repository](https://github.com/mosaicoo/svg-engine) for the full
+dependency graph.
 :::

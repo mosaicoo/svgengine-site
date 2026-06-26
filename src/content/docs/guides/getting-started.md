@@ -42,8 +42,8 @@ export class MyViewer {
 
 :::note
 This is a read-only renderer — no Material UI and no editing services are
-loaded. The full public API is documented in the library repository
-(`docs/09-api-publica.md`).
+loaded. The full public API is documented in the
+[library repository](https://github.com/mosaicoo/svg-engine).
 :::
 
 ## Add an SVG file picker

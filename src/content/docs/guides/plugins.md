@@ -124,7 +124,7 @@ uninstall reverses every contribution automatically.
 | Tool options panels | `ToolOptionsRegistry` |
 
 :::note
-The full author guide (more recipes — tools, importers, exporters, effects) lives
-in the library repository (`docs/10-guia-plugin.md`). The library also ships a
-plugin manager and an opt-in, fail-closed loader for trusted external plugins.
+More recipes (tools, importers, exporters, effects) are covered in the
+[library repository](https://github.com/mosaicoo/svg-engine). The library also
+ships a plugin manager and an opt-in loader for trusted external plugins.
 :::

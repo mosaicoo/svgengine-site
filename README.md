@@ -46,9 +46,9 @@ there creates a new route; register it in the sidebar in `astro.config.mjs`.
 ## Content guidelines
 
 - All repository content is written in **English**.
-- Product facts (version, test counts, entry points, performance numbers) must
-  be **verified against the library source** before release — do not hardcode
-  volatile figures without a fresh check.
+- Keep product details accurate; link to the
+  [library repository](https://github.com/mosaicoo/svg-engine) for version-specific
+  numbers rather than copying them.
 - Never commit secrets, tokens, credentials or machine-local absolute paths.
 
 ## Contributing

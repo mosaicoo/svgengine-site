@@ -39,9 +39,9 @@ feat:  fix:  docs:  refactor:  perf:  test:  chore:
 ## Content guidelines
 
 - All content is written in **English**.
-- Product facts (version, test counts, entry points, performance numbers) must
-  be **verified against the library source** before being published — do not
-  hardcode volatile figures without a fresh check.
+- Keep product details accurate; link to the
+  [library repository](https://github.com/mosaicoo/svg-engine) for version-specific
+  numbers rather than copying them.
 - Prefer clear, technical, developer-focused writing over marketing language.
 
 ## Code style
