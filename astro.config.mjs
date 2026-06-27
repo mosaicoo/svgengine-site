@@ -93,6 +93,13 @@ export default defineConfig({
                 { label: 'Ellipse', slug: 'using/tools/ellipse' },
                 { label: 'Polygon', slug: 'using/tools/polygon' },
                 { label: 'Text', slug: 'using/tools/text' },
+                { label: 'Eyedropper', slug: 'using/tools/eyedropper' },
+                { label: 'Knife', slug: 'using/tools/knife' },
+                { label: 'Smooth', slug: 'using/tools/smooth' },
+                { label: 'Gradient', slug: 'using/tools/gradient' },
+                { label: 'Width', slug: 'using/tools/width' },
+                { label: 'Symbol Sprayer', slug: 'using/tools/symbol-sprayer' },
+                { label: 'Page', slug: 'using/tools/page' },
               ],
             },
             {
