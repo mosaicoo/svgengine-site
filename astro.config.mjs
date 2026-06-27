@@ -113,6 +113,11 @@ export default defineConfig({
               slug: 'using/workflows',
             },
             {
+              label: 'Tutorials',
+              translations: { 'pt-BR': 'Tutoriais', es: 'Tutoriales' },
+              slug: 'using/tutorials',
+            },
+            {
               label: 'FAQ',
               translations: { 'pt-BR': 'FAQ', es: 'FAQ' },
               slug: 'using/faq',
@@ -137,6 +142,11 @@ export default defineConfig({
               label: 'Plugins',
               translations: { 'pt-BR': 'Plugins', es: 'Plugins' },
               slug: 'guides/plugins',
+            },
+            {
+              label: 'Contributing',
+              translations: { 'pt-BR': 'Contribuindo', es: 'Contribuir' },
+              slug: 'guides/contributing',
             },
           ],
         },
