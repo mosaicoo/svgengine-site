@@ -79,7 +79,16 @@ export default defineConfig({
             {
               label: 'Tools',
               translations: { 'pt-BR': 'Ferramentas', es: 'Herramientas' },
-              slug: 'using/tools',
+              items: [
+                {
+                  label: 'Overview',
+                  translations: { 'pt-BR': 'Visão geral', es: 'Resumen' },
+                  slug: 'using/tools',
+                },
+                { label: 'Rectangle', slug: 'using/tools/rectangle' },
+                { label: 'Ellipse', slug: 'using/tools/ellipse' },
+                { label: 'Polygon', slug: 'using/tools/polygon' },
+              ],
             },
             {
               label: 'Keyboard shortcuts',
