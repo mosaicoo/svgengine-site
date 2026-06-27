@@ -11,16 +11,17 @@ interactions) are being added section by section.
 ## Selection
 
 - **Select** (`V`) — select, move, scale and rotate objects.
-- **Direct Select** — edit a path's individual anchor points and handles
+- **Direct Select** (`A`) — edit a path's individual anchor points and handles
   (cusp / smooth / symmetric).
 
 ## Drawing
 
-- **Pen** (`P`) — draw precise Bézier paths point by point.
-- **Pencil** — draw freehand paths.
-- **Rectangle**, **Ellipse**, **Polygon** (and star) — draw basic shapes.
-- **Text** — add and edit text, including rich-text runs, variable fonts and
-  text on a path.
+- **Pen** (`B`) — draw precise Bézier paths point by point.
+- **Pencil** (`P`) — draw freehand paths.
+- **Rectangle** (`R`), **Ellipse** (`E`), **Polygon** (`Y`) — draw basic shapes
+  (Polygon also draws stars).
+- **Text** (`T`) — add and edit text, including rich-text runs, variable fonts
+  and text on a path.
 
 ## Editing & utilities
 
@@ -32,7 +33,7 @@ interactions) are being added section by section.
   gradient stops and axis are edited on the canvas via the gradient overlay.
 - **Symbol Sprayer** (`O`) — drag to spray instances of the active symbol, with
   a live preview and a single undo per spray.
-- **Page** — manage pages / artboards (the Artboard tool).
+- **Page** (`Shift`+`O`) — manage pages / artboards (the Artboard tool).
 
 :::note
 Each tool's options live in the **Tool Options** bar while the tool is active.

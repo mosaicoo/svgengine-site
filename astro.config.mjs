@@ -85,6 +85,8 @@ export default defineConfig({
                   translations: { 'pt-BR': 'Visão geral', es: 'Resumen' },
                   slug: 'using/tools',
                 },
+                { label: 'Select', slug: 'using/tools/select' },
+                { label: 'Direct Select', slug: 'using/tools/direct-select' },
                 { label: 'Rectangle', slug: 'using/tools/rectangle' },
                 { label: 'Ellipse', slug: 'using/tools/ellipse' },
                 { label: 'Polygon', slug: 'using/tools/polygon' },

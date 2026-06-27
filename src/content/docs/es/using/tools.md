@@ -12,16 +12,17 @@ añadiendo sección a sección.
 ## Selección
 
 - **Select** (`V`) — seleccionar, mover, escalar y rotar objetos.
-- **Direct Select** — editar los anchor points y handles individuales de un path
-  (cusp / smooth / symmetric).
+- **Direct Select** (`A`) — editar los anchor points y handles individuales de un
+  path (cusp / smooth / symmetric).
 
 ## Dibujo
 
-- **Pen** (`P`) — dibujar paths Bézier precisos, punto a punto.
-- **Pencil** — dibujar paths a mano alzada.
-- **Rectangle**, **Ellipse**, **Polygon** (y estrella) — dibujar formas básicas.
-- **Text** — añadir y editar texto, incluyendo runs de rich-text, variable fonts
-  y texto sobre path.
+- **Pen** (`B`) — dibujar paths Bézier precisos, punto a punto.
+- **Pencil** (`P`) — dibujar paths a mano alzada.
+- **Rectangle** (`R`), **Ellipse** (`E`), **Polygon** (`Y`) — dibujar formas
+  básicas (Polygon también dibuja estrellas).
+- **Text** (`T`) — añadir y editar texto, incluyendo runs de rich-text, variable
+  fonts y texto sobre path.
 
 ## Edición y utilidades
 
@@ -34,7 +35,7 @@ añadiendo sección a sección.
   gradient overlay.
 - **Symbol Sprayer** (`O`) — arrastrar para rociar instancias del símbolo activo,
   con vista previa en vivo y un único undo por rociado.
-- **Page** — gestionar páginas / artboards (la Artboard tool).
+- **Page** (`Shift`+`O`) — gestionar páginas / artboards (la Artboard tool).
 
 :::note
 Las opciones de cada herramienta están en la barra de **Tool Options** mientras

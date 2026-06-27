@@ -11,16 +11,17 @@ aparecem então na barra de **Tool Options**. Páginas detalhadas por ferramenta
 ## Seleção
 
 - **Select** (`V`) — selecionar, mover, escalar e rotacionar objetos.
-- **Direct Select** — editar os anchor points e handles individuais de um path
-  (cusp / smooth / symmetric).
+- **Direct Select** (`A`) — editar os anchor points e handles individuais de um
+  path (cusp / smooth / symmetric).
 
 ## Desenho
 
-- **Pen** (`P`) — desenhar paths Bézier precisos, ponto a ponto.
-- **Pencil** — desenhar paths à mão livre.
-- **Rectangle**, **Ellipse**, **Polygon** (e estrela) — desenhar formas básicas.
-- **Text** — adicionar e editar texto, incluindo runs de rich-text, variable
-  fonts e texto sobre path.
+- **Pen** (`B`) — desenhar paths Bézier precisos, ponto a ponto.
+- **Pencil** (`P`) — desenhar paths à mão livre.
+- **Rectangle** (`R`), **Ellipse** (`E`), **Polygon** (`Y`) — desenhar formas
+  básicas (Polygon também desenha estrelas).
+- **Text** (`T`) — adicionar e editar texto, incluindo runs de rich-text,
+  variable fonts e texto sobre path.
 
 ## Edição & utilitários
 
@@ -32,7 +33,7 @@ aparecem então na barra de **Tool Options**. Páginas detalhadas por ferramenta
   os stops e o eixo do gradiente são editados no canvas pelo gradient overlay.
 - **Symbol Sprayer** (`O`) — arrastar para espalhar instâncias do símbolo ativo,
   com preview ao vivo e um único undo por spray.
-- **Page** — gerenciar páginas / artboards (a Artboard tool).
+- **Page** (`Shift`+`O`) — gerenciar páginas / artboards (a Artboard tool).
 
 :::note
 As opções de cada ferramenta ficam na barra de **Tool Options** enquanto a

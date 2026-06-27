@@ -62,13 +62,20 @@ Press a key to switch tools. The tools palette also shows each key as a tooltip.
 | Key | Tool |
 | --- | --- |
 | `V` | Select |
-| `P` | Pen |
+| `A` | Direct Select |
+| `B` | Pen |
+| `P` | Pencil |
+| `R` | Rectangle |
+| `E` | Ellipse |
+| `Y` | Polygon |
+| `T` | Text |
 | `I` | Eyedropper |
 | `C` | Knife |
 | `S` | Smooth |
 | `G` | Gradient |
 | `W` | Width |
 | `O` | Symbol Sprayer |
+| `Shift`+`O` | Page (Artboard) |
 
-See [Tools](/svgengine-site/using/tools/) for what each tool does and the full
-list. Some features register their own shortcuts (for example, Find & Replace).
+See [Tools](/svgengine-site/using/tools/) for what each tool does. Some features
+register their own shortcuts (for example, Find & Replace).

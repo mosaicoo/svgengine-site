@@ -64,14 +64,21 @@ mostra cada tecla como tooltip.
 | Tecla | Ferramenta |
 | --- | --- |
 | `V` | Select |
-| `P` | Pen |
+| `A` | Direct Select |
+| `B` | Pen |
+| `P` | Pencil |
+| `R` | Rectangle |
+| `E` | Ellipse |
+| `Y` | Polygon |
+| `T` | Text |
 | `I` | Eyedropper |
 | `C` | Knife |
 | `S` | Smooth |
 | `G` | Gradient |
 | `W` | Width |
 | `O` | Symbol Sprayer |
+| `Shift`+`O` | Page (Artboard) |
 
 Veja [Ferramentas](/svgengine-site/pt/using/tools/) para o que cada ferramenta
-faz e a lista completa. Alguns recursos registram seus próprios atalhos (por
-exemplo, Find & Replace).
+faz. Alguns recursos registram seus próprios atalhos (por exemplo, Find &
+Replace).
