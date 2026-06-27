@@ -122,6 +122,11 @@ export default defineConfig({
               translations: { 'pt-BR': 'FAQ', es: 'FAQ' },
               slug: 'using/faq',
             },
+            {
+              label: 'Best practices',
+              translations: { 'pt-BR': 'Boas práticas', es: 'Buenas prácticas' },
+              slug: 'using/best-practices',
+            },
           ],
         },
         {
@@ -142,6 +147,11 @@ export default defineConfig({
               label: 'Plugins',
               translations: { 'pt-BR': 'Plugins', es: 'Plugins' },
               slug: 'guides/plugins',
+            },
+            {
+              label: 'Examples',
+              translations: { 'pt-BR': 'Exemplos', es: 'Ejemplos' },
+              slug: 'guides/examples',
             },
             {
               label: 'Contributing',
