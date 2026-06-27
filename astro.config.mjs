@@ -107,6 +107,16 @@ export default defineConfig({
               translations: { 'pt-BR': 'Atalhos de teclado', es: 'Atajos de teclado' },
               slug: 'using/keyboard-shortcuts',
             },
+            {
+              label: 'Workflows',
+              translations: { 'pt-BR': 'Fluxos de trabalho', es: 'Flujos de trabajo' },
+              slug: 'using/workflows',
+            },
+            {
+              label: 'FAQ',
+              translations: { 'pt-BR': 'FAQ', es: 'FAQ' },
+              slug: 'using/faq',
+            },
           ],
         },
         {
