@@ -28,17 +28,13 @@ añadiendo sección a sección.
 - **Eyedropper** (`I`) — capturar un estilo y aplicarlo a la selección.
 - **Knife** (`C`) — cortar y dividir paths.
 - **Smooth** (`S`) — suavizar y simplificar paths.
-- **Gradient** (`G`) — enfocar la selección y abrir el panel de gradiente para
-  editarlo. _(Los handles de gradiente en el canvas aún se están construyendo.)_
+- **Width** (`W`) — aplicar un perfil de ancho variable al trazo de un path.
+- **Gradient** (`G`) — enfocar la forma seleccionada y abrir el panel de
+  gradiente; los stops y el eje del gradiente se editan en el canvas mediante el
+  gradient overlay.
+- **Symbol Sprayer** (`O`) — arrastrar para rociar instancias del símbolo activo,
+  con vista previa en vivo y un único undo por rociado.
 - **Page** — gestionar páginas / artboards (la Artboard tool).
-
-## Herramientas en preview
-
-Estas herramientas aparecen en la paleta pero **aún no están totalmente
-conectadas** — reservan su lugar para próximas versiones:
-
-- **Width** (`W`) — trazos de ancho variable. _(Preview.)_
-- **Symbol Sprayer** (`O`) — rociar instancias de símbolo. _(Preview.)_
 
 :::note
 Las opciones de cada herramienta están en la barra de **Tool Options** mientras

@@ -27,17 +27,12 @@ interactions) are being added section by section.
 - **Eyedropper** (`I`) — sample a style and apply it to the selection.
 - **Knife** (`C`) — cut and split paths.
 - **Smooth** (`S`) — smooth and simplify paths.
-- **Gradient** (`G`) — focus the selection and open the gradient panel to edit
-  its gradient. _(In-canvas gradient handles are still being built.)_
+- **Width** (`W`) — apply a variable-width profile to a path's stroke.
+- **Gradient** (`G`) — focus the selected shape and open the gradient panel;
+  gradient stops and axis are edited on the canvas via the gradient overlay.
+- **Symbol Sprayer** (`O`) — drag to spray instances of the active symbol, with
+  a live preview and a single undo per spray.
 - **Page** — manage pages / artboards (the Artboard tool).
-
-## Preview tools
-
-These tools appear in the palette but are **not fully wired yet** — they reserve
-their place for upcoming releases:
-
-- **Width** (`W`) — variable-width strokes. _(Preview.)_
-- **Symbol Sprayer** (`O`) — spray symbol instances. _(Preview.)_
 
 :::note
 Each tool's options live in the **Tool Options** bar while the tool is active.

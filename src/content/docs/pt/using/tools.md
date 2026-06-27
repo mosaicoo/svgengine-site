@@ -27,17 +27,12 @@ aparecem então na barra de **Tool Options**. Páginas detalhadas por ferramenta
 - **Eyedropper** (`I`) — capturar um estilo e aplicá-lo à seleção.
 - **Knife** (`C`) — cortar e dividir paths.
 - **Smooth** (`S`) — suavizar e simplificar paths.
-- **Gradient** (`G`) — focar a seleção e abrir o painel de gradiente para
-  editá-lo. _(Os handles de gradiente no canvas ainda estão em construção.)_
+- **Width** (`W`) — aplicar um perfil de largura variável ao traço de um path.
+- **Gradient** (`G`) — focar a forma selecionada e abrir o painel de gradiente;
+  os stops e o eixo do gradiente são editados no canvas pelo gradient overlay.
+- **Symbol Sprayer** (`O`) — arrastar para espalhar instâncias do símbolo ativo,
+  com preview ao vivo e um único undo por spray.
 - **Page** — gerenciar páginas / artboards (a Artboard tool).
-
-## Ferramentas em preview
-
-Estas ferramentas aparecem na paleta, mas **ainda não estão totalmente
-ligadas** — reservam o lugar para próximos lançamentos:
-
-- **Width** (`W`) — traços de largura variável. _(Preview.)_
-- **Symbol Sprayer** (`O`) — espalhar instâncias de símbolo. _(Preview.)_
 
 :::note
 As opções de cada ferramenta ficam na barra de **Tool Options** enquanto a
