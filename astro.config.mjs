@@ -12,6 +12,11 @@ export default defineConfig({
       title: 'svg-engine',
       description:
         'Embeddable, headless-first SVG editor for Angular v21. Render, manipulate and optimize SVG — import only what you need.',
+      logo: {
+        light: './src/assets/svg-engine-logo.svg',
+        dark: './src/assets/svg-engine-logo-dark.svg',
+        replacesTitle: true,
+      },
       customCss: ['./src/styles/custom.css'],
       defaultLocale: 'root',
       locales: {

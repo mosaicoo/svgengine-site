@@ -1,0 +1,14 @@
+<svg width="1040" height="300" viewBox="0 0 1040 300" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>svg-engine</title>
+<desc>The svg-engine logo: a blue Bézier-node symbol next to the svg-engine wordmark.</desc>
+<g transform="translate(36,30) scale(0.5)">
+<path d="M96,400 C184,400 184,256 256,256 S328,112 416,112" fill="none" stroke="#2563eb" stroke-width="18" stroke-linecap="round"/>
+<line x1="184" y1="256" x2="328" y2="256" stroke="#93c5fd" stroke-width="7" stroke-linecap="round"/>
+<circle cx="184" cy="256" r="13" fill="#2563eb"/>
+<circle cx="328" cy="256" r="13" fill="#2563eb"/>
+<rect x="84" y="388" width="24" height="24" rx="3" fill="#ffffff" stroke="#2563eb" stroke-width="6"/>
+<rect x="404" y="100" width="24" height="24" rx="3" fill="#ffffff" stroke="#2563eb" stroke-width="6"/>
+<rect x="239" y="239" width="34" height="34" rx="4" fill="#ffffff" stroke="#2563eb" stroke-width="8"/>
+</g>
+<text x="330" y="205" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="132" font-weight="600" letter-spacing="-3"><tspan fill="#2563eb">svg</tspan><tspan fill="#1f2937">-engine</tspan></text>
+</svg>
