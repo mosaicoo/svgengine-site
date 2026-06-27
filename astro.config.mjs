@@ -87,9 +87,12 @@ export default defineConfig({
                 },
                 { label: 'Select', slug: 'using/tools/select' },
                 { label: 'Direct Select', slug: 'using/tools/direct-select' },
+                { label: 'Pen', slug: 'using/tools/pen' },
+                { label: 'Pencil', slug: 'using/tools/pencil' },
                 { label: 'Rectangle', slug: 'using/tools/rectangle' },
                 { label: 'Ellipse', slug: 'using/tools/ellipse' },
                 { label: 'Polygon', slug: 'using/tools/polygon' },
+                { label: 'Text', slug: 'using/tools/text' },
               ],
             },
             {
