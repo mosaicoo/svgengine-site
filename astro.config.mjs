@@ -57,8 +57,24 @@ export default defineConfig({
           ],
         },
         {
-          label: 'Concepts',
-          translations: { 'pt-BR': 'Conceitos', es: 'Conceptos' },
+          label: 'Using the editor',
+          translations: { 'pt-BR': 'Usando o editor', es: 'Usar el editor' },
+          items: [
+            {
+              label: 'Tools',
+              translations: { 'pt-BR': 'Ferramentas', es: 'Herramientas' },
+              slug: 'using/tools',
+            },
+            {
+              label: 'Keyboard shortcuts',
+              translations: { 'pt-BR': 'Atalhos de teclado', es: 'Atajos de teclado' },
+              slug: 'using/keyboard-shortcuts',
+            },
+          ],
+        },
+        {
+          label: 'For developers',
+          translations: { 'pt-BR': 'Para desenvolvedores', es: 'Para desarrolladores' },
           items: [
             {
               label: 'Architecture',
