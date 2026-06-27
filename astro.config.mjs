@@ -16,6 +16,8 @@ export default defineConfig({
       defaultLocale: 'root',
       locales: {
         root: { label: 'English', lang: 'en' },
+        pt: { label: 'Português', lang: 'pt-BR' },
+        es: { label: 'Español', lang: 'es' },
       },
       social: [
         {
@@ -28,21 +30,51 @@ export default defineConfig({
         baseUrl: 'https://github.com/mosaicoo/svgengine-site/edit/main/',
       },
       sidebar: [
-        { label: 'Live demo', slug: 'demo' },
+        {
+          label: 'Live demo',
+          translations: { 'pt-BR': 'Demo ao vivo', es: 'Demo en vivo' },
+          slug: 'demo',
+        },
         {
           label: 'Start here',
+          translations: { 'pt-BR': 'Comece aqui', es: 'Empieza aquí' },
           items: [
-            { label: 'Overview', slug: 'guides/overview' },
-            { label: 'Features', slug: 'guides/features' },
-            { label: 'Getting started', slug: 'guides/getting-started' },
+            {
+              label: 'Overview',
+              translations: { 'pt-BR': 'Visão geral', es: 'Resumen' },
+              slug: 'guides/overview',
+            },
+            {
+              label: 'Features',
+              translations: { 'pt-BR': 'Recursos', es: 'Funcionalidades' },
+              slug: 'guides/features',
+            },
+            {
+              label: 'Getting started',
+              translations: { 'pt-BR': 'Primeiros passos', es: 'Primeros pasos' },
+              slug: 'guides/getting-started',
+            },
           ],
         },
         {
           label: 'Concepts',
+          translations: { 'pt-BR': 'Conceitos', es: 'Conceptos' },
           items: [
-            { label: 'Architecture', slug: 'guides/architecture' },
-            { label: 'Entry points', slug: 'reference/entry-points' },
-            { label: 'Plugins', slug: 'guides/plugins' },
+            {
+              label: 'Architecture',
+              translations: { 'pt-BR': 'Arquitetura', es: 'Arquitectura' },
+              slug: 'guides/architecture',
+            },
+            {
+              label: 'Entry points',
+              translations: { 'pt-BR': 'Entry points', es: 'Entry points' },
+              slug: 'reference/entry-points',
+            },
+            {
+              label: 'Plugins',
+              translations: { 'pt-BR': 'Plugins', es: 'Plugins' },
+              slug: 'guides/plugins',
+            },
           ],
         },
       ],

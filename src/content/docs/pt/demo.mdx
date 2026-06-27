@@ -1,0 +1,22 @@
+---
+title: Demo ao vivo
+description: Teste o svg-engine no navegador — um editor completo e ao vivo, rodando sobre a library.
+template: splash
+---
+
+import { LinkButton } from '@astrojs/starlight/components';
+import DemoEmbed from '../../../components/DemoEmbed.astro';
+
+Teste o editor completo aqui mesmo — ele roda sobre `@mosaicoo/svg-engine`. Para
+a melhor experiência, abra em uma aba própria.
+
+<div class="demo-actions">
+  <LinkButton href="https://svgstudio.mosaicoo.tech/" target="_blank" variant="primary" icon="external" iconPlacement="end">
+    Abrir em nova aba
+  </LinkButton>
+  <LinkButton href="/svgengine-site/pt/guides/getting-started/" variant="minimal" icon="right-arrow" iconPlacement="end">
+    Primeiros passos
+  </LinkButton>
+</div>
+
+<DemoEmbed loadingLabel="Carregando o editor…" />

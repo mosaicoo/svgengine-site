@@ -1,12 +1,16 @@
 ---
 // Embeds the hosted svg-studio editor with a loading skeleton.
+interface Props {
+  loadingLabel?: string;
+}
+const { loadingLabel = 'Loading the editor…' } = Astro.props;
 const src = 'https://svgstudio.mosaicoo.tech/';
 ---
 
 <div class="demo-stage" data-demo-stage>
   <div class="demo-skeleton">
     <div class="demo-spinner"></div>
-    <p>Loading the editor…</p>
+    <p>{loadingLabel}</p>
   </div>
   <iframe
     class="demo-frame"

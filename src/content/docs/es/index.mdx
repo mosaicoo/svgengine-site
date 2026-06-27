@@ -1,0 +1,154 @@
+---
+title: svg-engine
+description: Editor de SVG embebible, headless-first, para Angular v21. Renderiza, manipula y optimiza SVG — importa solo lo que necesites.
+template: splash
+hero:
+  tagline: El editor de SVG embebible para Angular — headless por dentro, profesional por fuera.
+  actions:
+    - text: Demo en vivo
+      link: /svgengine-site/es/demo/
+      icon: external
+      variant: primary
+    - text: Primeros pasos
+      link: /svgengine-site/es/guides/getting-started/
+      icon: right-arrow
+      variant: secondary
+    - text: Ver en GitHub
+      link: https://github.com/mosaicoo/svg-engine
+      icon: external
+      variant: minimal
+    - text: Ver en npm
+      link: https://www.npmjs.com/package/@mosaicoo/svg-engine
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid, LinkButton, Badge } from '@astrojs/starlight/components';
+
+<div class="hero-badges">
+  <Badge text="Angular v21" variant="note" size="medium" />
+  <Badge text="Headless-first" variant="tip" size="medium" />
+  <Badge text="9 entry points" variant="default" size="medium" />
+  <Badge text="Apache-2.0" variant="success" size="medium" />
+  <Badge text="pre-1.0" variant="caution" size="medium" />
+</div>
+
+## ¿Por qué svg-engine?
+
+La mayoría de las librerías de SVG son un **widget caja negra** (difícil de
+extender, arrastra su propia UI) o un **parser/serializer puro** (sin edición,
+sin render, sin UX). svg-engine está en el medio: un **núcleo de editor
+extensible por plugins**, donde el modelo, el render, los servicios de edición y
+la UI Material son **entry points separados**. Compones solo lo que tu app
+necesita.
+
+<CardGrid>
+  <Card title="Headless-first" icon="puzzle">
+    El núcleo no depende de Angular Material. La UI profesional es opt-in y
+    reemplazable por tu app.
+  </Card>
+  <Card title="Importa solo lo necesario" icon="rocket">
+    Entry points independientes y lazy-loadable — desde un visor mínimo hasta un
+    editor completo.
+  </Card>
+  <Card title="Modelo inmutable + signals" icon="approve-check">
+    Estado reactivo con `signal`/`computed`; cada mutación produce un nuevo
+    árbol. Undo automático mediante el patrón Command.
+  </Card>
+  <Card title="Extensible por plugins" icon="setting">
+    Categorías de plugin para renderers, tools, importers/exporters, efectos,
+    paletas, menús y más — sin hacer fork del core.
+  </Card>
+</CardGrid>
+
+## Compón solo lo que necesites
+
+Cada entry point secundario es independiente y lazy-loadable. Consumir `core`
+**no** arrastra render, edición, UI ni la capa de IA.
+
+| Capa | Entry points | UI Material |
+| --- | --- | --- |
+| Núcleo headless | `core` · `render` · `io` · `optimize` · `edit` | No |
+| UI profesional | `ui` | Opt-in |
+| IA (opt-in) | `ai/nlu` · `ai/nlu-ui` · `ai/nlu-voice-wasm` | Parcial |
+
+<LinkButton href="/svgengine-site/es/reference/entry-points/" variant="secondary" icon="right-arrow" iconPlacement="end">
+  Ver todos los entry points
+</LinkButton>
+
+## Una superficie de edición profesional
+
+El editor opcional alcanza un conjunto de funciones comparable al de las
+herramientas vectoriales de escritorio — todo sobre el mismo motor headless.
+
+<CardGrid>
+  <Card title="Dibujar">
+    Select y Direct-Select, Pen y Pencil, herramientas de forma, texto
+    enriquecido (variable fonts, texto sobre path), además de Eyedropper, Knife,
+    Width y Symbol Sprayer.
+  </Card>
+  <Card title="Editar geometría">
+    Editor de Path/Anchor (cusp / smooth / symmetric), operaciones booleanas del
+    Pathfinder, operaciones de path (simplify / join / outline stroke / offset),
+    live corners y compound paths.
+  </Card>
+  <Card title="Componer documentos">
+    Pages / artboards, capas, Smart Objects, símbolos e instancias, snapshots de
+    versión, autoguardado y recuperación.
+  </Card>
+  <Card title="Estilo">
+    Efectos y filtros no destructivos y encadenables, gradientes con editor
+    inline, patterns y un sistema de libraries (formas, paletas, gradientes,
+    patterns, símbolos, brushes, graphic styles y plantillas).
+  </Card>
+  <Card title="Productividad">
+    Find &amp; Replace, alinear / distribuir, atajos de teclado configurables,
+    auto-trace (raster → vector), code generators, export por asset y línea de
+    tiempo de animación.
+  </Card>
+  <Card title="Comando por voz (opt-in)">
+    Comando por lenguaje natural y speech-to-text en el dispositivo (Whisper) —
+    totalmente opcional y desacoplado del core del editor.
+  </Card>
+</CardGrid>
+
+## Garantías arquitectónicas
+
+<CardGrid>
+  <Card title="Frontera headless">
+    `core`, `render`, `io`, `optimize` y `edit` tienen dependencia **cero** de
+    `@angular/material` o `@angular/cdk`. Material vive solo en `ui`.
+  </Card>
+  <Card title="Modelo inmutable">
+    Cada mutación produce un nuevo árbol (structural sharing). El undo es
+    snapshot y replay, no un frágil sistema de deltas.
+  </Card>
+  <Card title="Patrón Command">
+    Cada mutación pasa por un único `CommandBus`, así que undo/redo es automático
+    y consistente.
+  </Card>
+  <Card title="OnPush en todo">
+    Cada componente usa `ChangeDetectionStrategy.OnPush`; el estado reactivo es
+    `signal`/`computed`, sin Subjects en la API pública.
+  </Card>
+</CardGrid>
+
+## Primeros pasos
+
+Publicado en npm como el paquete con scope **`@mosaicoo/svg-engine`**:
+
+```bash
+npm install @mosaicoo/svg-engine @angular/core@^21
+```
+
+<div class="cta-row">
+  <LinkButton href="/svgengine-site/es/guides/getting-started/" variant="primary" icon="right-arrow" iconPlacement="end">
+    Leer la guía
+  </LinkButton>
+  <LinkButton href="https://www.npmjs.com/package/@mosaicoo/svg-engine" variant="secondary" icon="external" iconPlacement="end">
+    Ver en npm
+  </LinkButton>
+  <LinkButton href="https://github.com/mosaicoo/svg-engine" variant="minimal" icon="external" iconPlacement="end">
+    Star en GitHub
+  </LinkButton>
+</div>
