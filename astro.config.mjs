@@ -61,6 +61,22 @@ export default defineConfig({
           translations: { 'pt-BR': 'Usando o editor', es: 'Usar el editor' },
           items: [
             {
+              label: 'Vector editing basics',
+              translations: {
+                'pt-BR': 'Conceitos de edição vetorial',
+                es: 'Conceptos de edición vectorial',
+              },
+              slug: 'using/concepts',
+            },
+            {
+              label: 'Interface overview',
+              translations: {
+                'pt-BR': 'Visão geral da interface',
+                es: 'Resumen de la interfaz',
+              },
+              slug: 'using/interface',
+            },
+            {
               label: 'Tools',
               translations: { 'pt-BR': 'Ferramentas', es: 'Herramientas' },
               slug: 'using/tools',
