@@ -48,6 +48,15 @@
   background: var(--sl-color-bg);
 }
 
+/* Widen the playground embed past the prose column by 100px (50px each side).
+   Only on wider viewports, so it never overflows on small screens. */
+@media (min-width: 60rem) {
+  .pg-stage {
+    width: calc(100% + 100px);
+    margin-inline: -50px;
+  }
+}
+
 /* Loading skeleton shown over the demo iframe until it loads */
 .demo-stage {
   position: relative;

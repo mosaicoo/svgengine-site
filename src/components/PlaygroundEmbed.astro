@@ -8,7 +8,7 @@ interface Props {
 }
 const {
   route,
-  height = 560,
+  height = 620,
   loadingLabel = 'Loading the interactive tutorial…',
   openLabel = 'Open in a new tab',
 } = Astro.props;
@@ -18,7 +18,7 @@ const src = `https://mosaicoo.github.io/svgengine-playground/tutorials/${route}?
 <div class="demo-actions">
   <a href={src} target="_blank" rel="noopener noreferrer">{openLabel} ↗</a>
 </div>
-<div class="demo-stage" data-pg-stage>
+<div class="demo-stage pg-stage" data-pg-stage>
   <div class="demo-skeleton">
     <div class="demo-spinner"></div>
     <p>{loadingLabel}</p>
