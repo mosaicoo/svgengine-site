@@ -3,9 +3,12 @@ title: Tutoriais
 description: Passo a passo curtos para se familiarizar com o editor.
 ---
 
+import PlaygroundEmbed from '../../../../components/PlaygroundEmbed.astro';
+
 Tutoriais práticos que combinam as [ferramentas](/svgengine-site/pt/using/tools/)
-e os [conceitos](/svgengine-site/pt/using/concepts/). Experimente na
-[demo ao vivo](/svgengine-site/pt/demo/).
+e os [conceitos](/svgengine-site/pt/using/concepts/). Cada um tem um **playground
+interativo** abaixo dos passos — experimente na própria página, ou na
+[demo ao vivo](/svgengine-site/pt/demo/) completa.
 
 ## 1. Desenhe sua primeira forma
 
@@ -15,11 +18,15 @@ e os [conceitos](/svgengine-site/pt/using/concepts/). Experimente na
 3. Pressione `V` para ir ao **Select** e clique na sua forma.
 4. No **Inspector**, defina uma cor de **fill**. Pronto — seu primeiro objeto.
 
+<PlaygroundEmbed route="draw-first-shape" loadingLabel="Carregando o tutorial interativo…" openLabel="Abrir em nova aba" />
+
 ## 2. Faça um retângulo arredondado
 
 1. Pressione `R` de novo.
 2. Na barra de **Tool Options**, aumente o **Corner radius**.
 3. Arraste um novo retângulo — os cantos ficam arredondados.
+
+<PlaygroundEmbed route="rounded-rectangle" loadingLabel="Carregando o tutorial interativo…" openLabel="Abrir em nova aba" />
 
 ## 3. Edite os pontos de um path
 
@@ -29,6 +36,8 @@ e os [conceitos](/svgengine-site/pt/using/concepts/). Experimente na
    o tipo (cusp ↔ smooth ↔ symmetric); **duplo-clique num segmento** para
    adicionar um ponto.
 
+<PlaygroundEmbed route="edit-path-points" loadingLabel="Carregando o tutorial interativo…" openLabel="Abrir em nova aba" />
+
 ## 4. Combine duas formas
 
 1. Desenhe duas formas sobrepostas.
@@ -36,11 +45,15 @@ e os [conceitos](/svgengine-site/pt/using/concepts/). Experimente na
 3. Aplique uma operação do **Pathfinder** — tente **Union** para unir, ou
    **Subtract** para subtrair uma da outra.
 
+<PlaygroundEmbed route="combine-shapes" loadingLabel="Carregando o tutorial interativo…" openLabel="Abrir em nova aba" />
+
 ## 5. Desenhe um traço livre e limpe-o
 
 1. Pressione `P` para o **Pencil** e desenhe uma linha à mão livre.
 2. Pressione `S` para o **Smooth** e aplique para simplificar a linha.
 3. Vá para o **Direct Select** (`A`) para ajustes finais.
+
+<PlaygroundEmbed route="freehand-smooth" loadingLabel="Carregando o tutorial interativo…" openLabel="Abrir em nova aba" />
 
 :::tip[Continue]
 Veja [fluxos de trabalho & interações](/svgengine-site/pt/using/workflows/) para

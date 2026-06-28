@@ -1,0 +1,46 @@
+---
+// Embeds an interactive tutorial from the svg-engine playground.
+interface Props {
+  route: string;
+  height?: number;
+  loadingLabel?: string;
+  openLabel?: string;
+}
+const {
+  route,
+  height = 560,
+  loadingLabel = 'Loading the interactive tutorial…',
+  openLabel = 'Open in a new tab',
+} = Astro.props;
+const src = `https://mosaicoo.github.io/svgengine-playground/tutorials/${route}?embed=1`;
+---
+
+<div class="demo-actions">
+  <a href={src} target="_blank" rel="noopener noreferrer">{openLabel} ↗</a>
+</div>
+<div class="demo-stage" data-pg-stage>
+  <div class="demo-skeleton">
+    <div class="demo-spinner"></div>
+    <p>{loadingLabel}</p>
+  </div>
+  <iframe
+    class="pg-frame"
+    style={`height:${height}px`}
+    src={src}
+    title="svg-engine interactive tutorial"
+    loading="lazy"
+    allow="clipboard-write"
+    referrerpolicy="no-referrer"></iframe>
+</div>
+
+<script>
+  document.querySelectorAll('[data-pg-stage]').forEach((stage) => {
+    const frame = stage.querySelector('iframe');
+    if (!frame) return;
+    const reveal = () => stage.classList.add('is-loaded');
+    frame.addEventListener('load', reveal);
+    // The playground is a cross-origin SPA, so reveal after a few seconds
+    // even if the load event was missed.
+    setTimeout(reveal, 9000);
+  });
+</script>

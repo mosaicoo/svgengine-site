@@ -3,10 +3,13 @@ title: Tutoriales
 description: Recorridos cortos paso a paso para familiarizarte con el editor.
 ---
 
+import PlaygroundEmbed from '../../../../components/PlaygroundEmbed.astro';
+
 Recorridos prácticos que combinan las
 [herramientas](/svgengine-site/es/using/tools/) y los
-[conceptos](/svgengine-site/es/using/concepts/). Pruébalos en la
-[demo en vivo](/svgengine-site/es/demo/).
+[conceptos](/svgengine-site/es/using/concepts/). Cada uno tiene un **playground
+interactivo** debajo de los pasos — pruébalo en la propia página, o en la
+[demo en vivo](/svgengine-site/es/demo/) completa.
 
 ## 1. Dibuja tu primera forma
 
@@ -16,11 +19,15 @@ Recorridos prácticos que combinan las
 3. Pulsa `V` para ir a **Select** y haz clic en tu forma.
 4. En el **Inspector**, define un color de **fill**. Listo — tu primer objeto.
 
+<PlaygroundEmbed route="draw-first-shape" loadingLabel="Cargando el tutorial interactivo…" openLabel="Abrir en una pestaña nueva" />
+
 ## 2. Haz un rectángulo redondeado
 
 1. Pulsa `R` de nuevo.
 2. En la barra de **Tool Options**, sube el **Corner radius**.
 3. Arrastra un nuevo rectángulo — las esquinas quedan redondeadas.
+
+<PlaygroundEmbed route="rounded-rectangle" loadingLabel="Cargando el tutorial interactivo…" openLabel="Abrir en una pestaña nueva" />
 
 ## 3. Edita los puntos de un path
 
@@ -30,6 +37,8 @@ Recorridos prácticos que combinan las
    su tipo (cusp ↔ smooth ↔ symmetric); **doble clic en un segmento** para añadir
    un punto.
 
+<PlaygroundEmbed route="edit-path-points" loadingLabel="Cargando el tutorial interactivo…" openLabel="Abrir en una pestaña nueva" />
+
 ## 4. Combina dos formas
 
 1. Dibuja dos formas superpuestas.
@@ -37,11 +46,15 @@ Recorridos prácticos que combinan las
 3. Aplica una operación del **Pathfinder** — prueba **Union** para unirlas, o
    **Subtract** para restar una de la otra.
 
+<PlaygroundEmbed route="combine-shapes" loadingLabel="Cargando el tutorial interactivo…" openLabel="Abrir en una pestaña nueva" />
+
 ## 5. Dibuja un trazo a mano alzada y límpialo
 
 1. Pulsa `P` para el **Pencil** y dibuja una línea a mano alzada.
 2. Pulsa `S` para el **Smooth** y aplícalo para simplificar la línea.
 3. Cambia a **Direct Select** (`A`) para los ajustes finales.
+
+<PlaygroundEmbed route="freehand-smooth" loadingLabel="Cargando el tutorial interactivo…" openLabel="Abrir en una pestaña nueva" />
 
 :::tip[Sigue]
 Mira los [flujos de trabajo e interacciones](/svgengine-site/es/using/workflows/)
