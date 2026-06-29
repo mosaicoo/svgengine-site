@@ -28,13 +28,13 @@ The headless boundary applies here too: `core`, `render`, `io`, `optimize`,
 | [`io`](/svgengine-site/reference/api/io/) | importer/exporter registries + SVG/PNG/SVGZ built-ins, code generators | No |
 | [`optimize`](/svgengine-site/reference/api/optimize/) | optimizer registry + built-in passes + optimize command | No |
 | [`edit`](/svgengine-site/reference/api/edit/) | selection, transform, tools, plugins, registries, libraries, pages, effects | No |
-| `ui` | shells, panels, dialogs, tool options, services | Yes |
-| `ai/nlu` | natural-language engine, dictionaries, matchers, LLM provider | No |
-| `ai/nlu-ui` | command input component + voice services | Yes |
-| `ai/nlu-voice-wasm` | on-device Whisper voice provider | No |
+| [`ui`](/svgengine-site/reference/api/ui/) | shells, panels, dialogs, tool options, services | Yes |
+| [`ai/nlu`](/svgengine-site/reference/api/ai-nlu/) | natural-language engine, dictionaries, matchers, LLM provider | No |
+| [`ai/nlu-ui`](/svgengine-site/reference/api/ai-nlu-ui/) | command input component + voice services | Yes |
+| [`ai/nlu-voice-wasm`](/svgengine-site/reference/api/ai-nlu-voice-wasm/) | on-device Whisper voice provider | No |
 
 :::note
-This reference is being expanded entry point by entry point. For the exact, most
-current signatures, the [library repository](https://github.com/mosaicoo/svg-engine)
-is always authoritative.
+For the exact, most current signatures, the
+[library repository](https://github.com/mosaicoo/svg-engine) is always
+authoritative.
 :::

@@ -28,14 +28,13 @@ A fronteira headless também se aplica aqui: `core`, `render`, `io`, `optimize`,
 | [`io`](/svgengine-site/pt/reference/api/io/) | registries de importer/exporter + built-ins SVG/PNG/SVGZ, code generators | Não |
 | [`optimize`](/svgengine-site/pt/reference/api/optimize/) | registry de optimizer + passes built-in + optimize command | Não |
 | [`edit`](/svgengine-site/pt/reference/api/edit/) | seleção, transform, tools, plugins, registries, libraries, pages, efeitos | Não |
-| `ui` | shells, painéis, dialogs, tool options, serviços | Sim |
-| `ai/nlu` | engine de linguagem natural, dicionários, matchers, provider LLM | Não |
-| `ai/nlu-ui` | componente de input de comando + serviços de voz | Sim |
-| `ai/nlu-voice-wasm` | provider de voz Whisper on-device | Não |
+| [`ui`](/svgengine-site/pt/reference/api/ui/) | shells, painéis, dialogs, tool options, serviços | Sim |
+| [`ai/nlu`](/svgengine-site/pt/reference/api/ai-nlu/) | engine de linguagem natural, dicionários, matchers, provider LLM | Não |
+| [`ai/nlu-ui`](/svgengine-site/pt/reference/api/ai-nlu-ui/) | componente de input de comando + serviços de voz | Sim |
+| [`ai/nlu-voice-wasm`](/svgengine-site/pt/reference/api/ai-nlu-voice-wasm/) | provider de voz Whisper on-device | Não |
 
 :::note
-Esta referência está sendo expandida entry point por entry point. Para as
-assinaturas exatas e mais atuais, o
+Para as assinaturas exatas e mais atuais, o
 [repositório da library](https://github.com/mosaicoo/svg-engine) é sempre
 autoritativo.
 :::
