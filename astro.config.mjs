@@ -191,6 +191,7 @@ export default defineConfig({
             { label: 'render', slug: 'reference/api/render' },
             { label: 'io', slug: 'reference/api/io' },
             { label: 'optimize', slug: 'reference/api/optimize' },
+            { label: 'edit', slug: 'reference/api/edit' },
           ],
         },
       ],

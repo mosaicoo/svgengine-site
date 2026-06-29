@@ -27,7 +27,7 @@ La frontera headless también aplica aquí: `core`, `render`, `io`, `optimize`,
 | [`render`](/svgengine-site/es/reference/api/render/) | el renderer, directivas por tipo, viewport, registry de node-renderer | No |
 | [`io`](/svgengine-site/es/reference/api/io/) | registries de importer/exporter + built-ins SVG/PNG/SVGZ, code generators | No |
 | [`optimize`](/svgengine-site/es/reference/api/optimize/) | registry de optimizer + passes built-in + optimize command | No |
-| `edit` | selección, transform, tools, plugins, registries, libraries, pages, efectos | No |
+| [`edit`](/svgengine-site/es/reference/api/edit/) | selección, transform, tools, plugins, registries, libraries, pages, efectos | No |
 | `ui` | shells, paneles, dialogs, tool options, servicios | Sí |
 | `ai/nlu` | motor de lenguaje natural, diccionarios, matchers, provider LLM | No |
 | `ai/nlu-ui` | componente de input de comando + servicios de voz | Sí |
