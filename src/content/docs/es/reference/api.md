@@ -23,7 +23,7 @@ La frontera headless también aplica aquí: `core`, `render`, `io`, `optimize`,
 
 | Entry point | Qué expone | ¿Material? |
 | --- | --- | --- |
-| `core` | modelo de datos, tree ops inmutables, document, comandos, servicios de history/state, geometría, animación, snapshots | No |
+| [`core`](/svgengine-site/es/reference/api/core/) | modelo de datos, tree ops inmutables, document, comandos, servicios de history/state, geometría, animación, snapshots | No |
 | [`render`](/svgengine-site/es/reference/api/render/) | el renderer, directivas por tipo, viewport, registry de node-renderer | No |
 | [`io`](/svgengine-site/es/reference/api/io/) | registries de importer/exporter + built-ins SVG/PNG/SVGZ, code generators | No |
 | [`optimize`](/svgengine-site/es/reference/api/optimize/) | registry de optimizer + passes built-in + optimize command | No |

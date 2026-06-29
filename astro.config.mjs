@@ -187,6 +187,7 @@ export default defineConfig({
               translations: { 'pt-BR': 'Visão geral', es: 'Resumen' },
               slug: 'reference/api',
             },
+            { label: 'core', slug: 'reference/api/core' },
             { label: 'render', slug: 'reference/api/render' },
             { label: 'io', slug: 'reference/api/io' },
             { label: 'optimize', slug: 'reference/api/optimize' },
