@@ -1,52 +1,44 @@
 ---
 title: 'API: optimize'
-description: Public API of @mosaicoo/svg-engine/optimize — the optimizer registry, built-in passes and optimize command.
+description: Public API of @mosaicoo/svg-engine/optimize — the optimizer registry, built-in passes and the undoable optimize command.
 ---
 
-`@mosaicoo/svg-engine/optimize` is the headless **optimization pipeline**: shrink
-and clean SVG documents without instantiating any editor UI. Zero Angular
-Material/CDK dependency. The built-in passes are conservative — they never change
-the visual render.
+`@mosaicoo/svg-engine/optimize` is a small, pluggable pipeline of **pure**
+document-to-document passes that shrink and clean up an SVG. Every pass is
+side-effect-free and worker-safe. Headless: no Angular Material/CDK.
 
 ```ts
 import { OptimizerRegistry, precisionOptimizer } from '@mosaicoo/svg-engine/optimize';
 ```
 
-## Contract
+## Registry & pipeline
 
-- **`Optimizer`** — `id`/`name`/`order`/`defaultEnabled?` + `optimize(doc): doc`.
+| API | Description | Use it to |
+| --- | --- | --- |
+| `OptimizerRegistry` | Registry of passes: `register(optimizer)` → `Disposable`, `get(id)`, the `optimizers` signal, and `runPipeline(document, enabledIds?)`. | Register custom passes and run the pipeline programmatically. |
+| `Optimizer` | The pass contract: `id`, `name`, optional `description`, `order` (lower runs first; default 100), `defaultEnabled` (default `true`), and a pure `optimize(document)`. | Implement your own optimization pass. |
 
-## Registry
-
-- **`OptimizerRegistry`** — `register`/`get`/`list` + `runPipeline(doc, enabledIds?)`,
-  which orders passes by `order` and chains them (returns the same reference when
-  nothing changed).
-
-## Command
-
-- **`OptimizeCommand`** — wraps `runPipeline` as a single undo entry (for the
-  editor; safe to ignore in headless usage).
+`runPipeline` runs the enabled passes in ascending `order`. Pass an `enabledIds`
+set to select specific passes; omit it to run every pass whose `defaultEnabled`
+isn't `false`. It returns a new document — or the original if nothing changed.
 
 ## Built-in passes
 
-| Pass | Effect |
+| Pass | Order | Default | What it does |
+| --- | --- | --- | --- |
+| `precisionOptimizer` | 10 | on | Round geometry/transform/style numbers to a fixed precision (default 3 dp), removing float noise like `0.30000000000000004`. |
+| `dropDefaultsOptimizer` | 50 | on | Drop presentation attributes equal to the SVG default (`opacity:1`, `visibility:visible`, …). |
+| `pruneEmptyGroupsOptimizer` | — | on | Remove empty groups from the tree. |
+| `stripAuthoredTitlesOptimizer` | 80 | **off** | Tell the exporter to omit the `<title>` emitted for named nodes (keeps `metadata.name` on the model; export-side only, reversible). Opt-in for production minification. |
+
+## Undoable optimization
+
+| API | Description |
 | --- | --- |
-| **`precisionOptimizer`** | round numerics to a fixed precision |
-| **`dropDefaultsOptimizer`** | strip default values (`opacity:1`, etc.) |
-| **`pruneEmptyGroupsOptimizer`** | remove empty `<g>` recursively (root preserved) |
-| **`stripAuthoredTitlesOptimizer`** | opt-in — drop authored-name `<title>` children (D-072 follow-up) |
-
-## Example — run the pipeline headlessly
-
-```ts
-const registry = inject(OptimizerRegistry);
-registry.register(precisionOptimizer);
-registry.register(dropDefaultsOptimizer);
-const optimized = registry.runPipeline(doc);
-```
+| `OptimizeCommand` | Wraps a full pipeline run as **one** undoable command (`isDestructive: true`), so optimizing inside an editor produces a single `Ctrl+Z` entry. No-op when the pipeline changes nothing. |
 
 :::note
-The `builtinOptimizersPlugin` wrapper (which auto-registers the passes at boot)
-lives in `@mosaicoo/svg-engine/edit`. Headless consumers register passes directly
-or call each `optimize()` function in sequence.
+In headless usage you typically call `registry.runPipeline()` directly;
+`OptimizeCommand` exists for editor integration with undo/redo. See the
+[core commands](/svgengine-site/reference/api/core/#commands--the-mutation-vocabulary).
 :::

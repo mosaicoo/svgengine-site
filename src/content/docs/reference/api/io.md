@@ -1,82 +1,72 @@
 ---
 title: 'API: io'
-description: Public API of @mosaicoo/svg-engine/io — SVG/PNG/SVGZ import & export, registries and code generators.
+description: Public API of @mosaicoo/svg-engine/io — import/export registries, the built-in SVG/PNG/SVGZ formats, code generators and defs utilities.
 ---
 
-`@mosaicoo/svg-engine/io` is the headless **parse / sanitize / serialize** entry
-point: read or write SVG (and PNG/SVGZ) without instantiating any editor UI. Zero
-Angular Material/CDK dependency.
+`@mosaicoo/svg-engine/io` moves documents in and out of the engine: import/export
+registries, the built-in file formats, source-code generators, and helpers for
+merging reusable `<defs>`. Headless: no Angular Material/CDK.
 
 ```ts
-import { svgImporter, svgExporter } from '@mosaicoo/svg-engine/io';
+import { ImporterRegistry, ExporterRegistry, svgImporter, svgExporter } from '@mosaicoo/svg-engine/io';
 ```
 
-## Contract types
+## Import & export registries
 
-- **`Importer`** — `mediaTypes`/`extensions` + `import(blob): ImportResult`.
-- **`Exporter`** — `mediaType`/`extension` + `export(doc): string | Blob`.
-- **`ImportResult`** — `{ ok: true, document, warnings } | { ok: false, error }`.
+Both registries are signal-backed; `register()` returns a `Disposable` so plugins
+can cleanly remove their formats. Lookups are insertion-ordered.
 
-## Registries
+| API | Description |
+| --- | --- |
+| `ImporterRegistry` | Registry of importers: `register(importer)` → `Disposable`, `get(id)`, `byExtension(ext)`, `byMediaType(type)`, plus the `importers` signal. |
+| `ExporterRegistry` | Registry of exporters: same shape (`register`, `get`, `byExtension`, `byMediaType`, `exporters` signal). |
+| `Importer` / `Exporter` | The contracts a format implements (`id`, `name`, extensions/media types, and `import(text)` / `export(document)`). |
+| `ImportResult` | The outcome of an import: `{ ok: true, document, warnings }` or `{ ok: false, error }` — import is best-effort and never throws on unsupported content. |
 
-- **`ImporterRegistry`** — `register`/`get`/`list` + `byMediaType` / `byExtension`.
-- **`ExporterRegistry`** — the same shape, for text and binary exporters.
+## Built-in formats
 
-## SVG import / export
+| API | Format | Notes |
+| --- | --- | --- |
+| `svgImporter` | SVG in | Parses SVG XML into a document. Sanitizes (drops scripts, event handlers, `javascript:` hrefs); unsupported elements are skipped with a warning. |
+| `svgExporter` | SVG out | **Deterministic**, byte-stable serialization (fixed attribute order, 6-decimal numbers, identity/empty omitted) — diff- and VCS-friendly. |
+| `pngExporter` / `renderPng(doc, scale?)` | PNG out | Rasterizes via `<canvas>`; async (returns a `Promise<Blob>`). Defaults to 2× resolution. `renderPng` lets you pick the scale. |
+| `svgzExporter` / `gzipText` / `gunzipText` | SVGZ out | Gzip-compressed SVG (`.svgz`, ~70–90% smaller) using the platform `CompressionStream` — zero deps. `gzipText`/`gunzipText` are reusable string↔bytes helpers. |
+| `nodeToSvgMarkup(node)` | — | Serialize a single node to SVG markup. |
 
-- **`svgImporter`** — built-in SVG parser. Sanitizes on the way in (drops
-  `<script>`, `on*` handlers and `javascript:` hrefs).
-- **`svgExporter`** — deterministic SVG serializer (canonical attribute order,
-  fixed numeric precision; identity transforms omitted).
-- **`nodeToSvgMarkup(node)`** — serialize a single node to SVG markup.
-
-## PNG export
-
-- **`pngExporter`** — `SvgDocument` → PNG `Blob` via `<canvas>` (supports @1x/@2x/@3x).
-- **`renderPng(...)`** — the pure rasterization helper used by `pngExporter`.
-
-## SVGZ (gzip-compressed SVG)
-
-- **`svgzExporter`** — export gzip-compressed SVG (`.svgz`).
-- **`gzipText`** / **`gunzipText`** — low-level gzip helpers.
-
-## `<defs>` helpers
-
-- **`mergeDefsFragments`** — merge `<defs>` fragments by id (keeps gradients when
-  swapping Smart Object content).
-- **`collectDefsIds`**, **`namespaceCollidingDefs`**, **`NamespacedDefs`** —
-  namespace colliding `<defs>` ids when merging SVGs from different sources.
+:::tip
+Exporters may be **sync or async**: SVG returns a `string`, PNG/SVGZ return a
+`Promise`. Handle both, e.g. `const out = await exporter.export(doc)`.
+:::
 
 ## Code generators
 
-Turn an SVG document into source code (React / Data URI).
+Turn a document into a **string of source code** (not a file). Pure and
+worker-safe; the registry mirrors the import/export ones.
 
-- Contract: **`CodeGenerator`**, **`CodeGeneratorOptionSpec`**,
-  **`CodeGeneratorTextOption`**, **`CodeGeneratorBooleanOption`**,
-  **`CodeGeneratorSelectOption`**, **`CodeGeneratorOptions`**,
-  **`CodeGeneratorOptionValue`**, **`resolveCodeGeneratorOptionDefaults`**.
-- **`CodeGeneratorRegistry`** — register/look up generators.
-- Built-ins: **`reactJsxGenerator`**, **`reactComponentGenerator`**,
-  **`dataUriGenerator`**, **`BUILTIN_CODE_GENERATORS`**.
-- Pure transforms: **`svgStringToJsx`**, **`svgToDataUri`**, **`applyCurrentColor`**,
-  **`stripXmlProlog`**, **`toPascalCaseComponentName`**.
+| API | Description |
+| --- | --- |
+| `CodeGeneratorRegistry` | Registry of generators: `register(generator)` → `Disposable`, `get(id)`, `generators` signal. |
+| `CodeGenerator` | The contract: `id`, `name`, `language`, `extension`, optional declarative `options`, and `generate(document, options?)`. |
+| `reactJsxGenerator` | Built-in: inline `<svg>` JSX with camelCased attributes. |
+| `reactComponentGenerator` | Built-in: a standalone React component file. |
+| `dataUriGenerator` | Built-in: a `data:image/svg+xml,…` URI. |
+| `BUILTIN_CODE_GENERATORS` | The array of the three built-in generators. |
 
-## Example — load a file
+**Option specs** (for building a generator's settings UI): `CodeGeneratorOptionSpec`
+(union of `CodeGeneratorTextOption` / `CodeGeneratorBooleanOption` /
+`CodeGeneratorSelectOption`), `CodeGeneratorOptions`, `CodeGeneratorOptionValue`,
+and `resolveCodeGeneratorOptionDefaults(gen)` to seed defaults.
 
-```ts
-import { provideSvgEnginePlugin, builtinIoPlugin } from '@mosaicoo/svg-engine/edit';
-providers: [provideSvgEnginePlugin(builtinIoPlugin)];
+**Reusable string transforms:** `svgStringToJsx`, `svgToDataUri`, `applyCurrentColor`
+(make icons themeable), `stripXmlProlog`, `toPascalCaseComponentName`.
 
-private readonly importers = inject(ImporterRegistry);
-async loadFile(file: File) {
-  const importer = this.importers.byMediaType('image/svg+xml');
-  const result = importer?.import(await file.text());
-  if (result?.ok) this.state.resetDocument(result.document);
-}
-```
+## Working with `<defs>`
 
-:::note
-The `builtinIoPlugin` / `pngExporterPlugin` wrappers (which auto-register these at
-boot) live in `@mosaicoo/svg-engine/edit`; the bare functions above are for
-headless tools.
-:::
+When you import content that brings its own reusable definitions, these helpers
+merge them into the document's shared `<defs>` without breaking references.
+
+| API | Description |
+| --- | --- |
+| `mergeDefsFragments(existing, incoming)` | Merge two `<defs>` fragments, deduping by top-level `id` (reference-preserving when nothing is new). |
+| `collectDefsIds(defs)` | Collect every element `id` defined in a `<defs>` fragment. |
+| `namespaceCollidingDefs(root, defs, taken, prefix)` | Rename only the ids that collide with `taken`, rewriting every reference in both the defs and the node tree. Returns `NamespacedDefs` (`root`, `defs`, `renamed` map). |

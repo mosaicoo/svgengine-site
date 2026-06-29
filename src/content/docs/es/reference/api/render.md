@@ -1,60 +1,59 @@
 ---
 title: 'API: render'
-description: API pública de @mosaicoo/svg-engine/render — el renderer read-only, directivas, viewport y registry.
+description: API pública de @mosaicoo/svg-engine/render — el componente renderer SVG read-only, el servicio de viewport y el registry de formas personalizadas.
 ---
 
-`@mosaicoo/svg-engine/render` es el **renderer read-only**: toma un árbol de
-`SvgNode` y lo renderiza como SVG con componentes y directivas standalone de
-Angular. No depende de Angular Material/CDK y sirve como visor embebido.
+`@mosaicoo/svg-engine/render` convierte un árbol de nodos en SVG real en pantalla.
+Es **read-only** — sin selección, edición ni interacción (eso vive en
+`svg-engine/edit`) — lo que lo hace ideal como **visor embebible** en una app de
+terceros. Headless: sin Angular Material/CDK.
 
 ```ts
-import { SvgeRenderer } from '@mosaicoo/svg-engine/render';
+import { SvgeRenderer, projectDocumentToRenderer } from '@mosaicoo/svg-engine/render';
 ```
 
-## Renderer top-level
+## El componente renderer
 
-- **`SvgeRenderer`** — el componente `<svge-renderer>`. Inputs: `tree`
-  (el `SvgNode` a renderizar), `viewBox`, `width`, `height`, `ariaLabel`
-  opcionales. Proyecta `<ng-content>` para superponer overlays dentro del mismo
-  `<svg>`.
+| API | Descripción | Úsalo para |
+| --- | --- | --- |
+| `SvgeRenderer` | El componente `<svge-renderer>`. Inputs: `tree` (`SvgNode` obligatorio), `viewBox`, `width`, `height`, `ariaLabel`, `defs`. Expone `svgElement()` para acceder al `<svg>` renderizado. | Mostrar un documento (o cualquier subárbol) como visor embebible de solo lectura. |
+| `projectDocumentToRenderer(doc)` | Devuelve `{ tree, viewBox }` de un `SvgDocument`, listo para enlazar al renderer. | Conectar un `SvgDocument` al `<svge-renderer>` en un solo paso. |
 
-## Dispatcher
+```html
+<svge-renderer [tree]="proj().tree" [viewBox]="proj().viewBox" [defs]="doc().defs ?? null" />
+```
 
-- **`SvgeNodeRenderer`** / **`SvgNodeRendererComponent`** — el dispatcher
-  `g[svgeNode]`: hace switch por `node.type`, recursa en grupos y recurre al
-  `NodeRendererRegistry` para tipos desconocidos.
+:::caution
+Si el documento usa gradientes, filtros, patterns u otras definiciones
+reutilizables, **debes** enlazar `[defs]` (p. ej. `[defs]="doc.defs ?? null"`). De
+lo contrario las referencias `url(#…)` no resuelven nada y esos rellenos desaparecen.
+:::
 
-## Directivas por tipo
+## Viewport (pan & zoom)
 
-Directivas aplicadas a elementos SVG nativos (no componentes con selector de
-custom element — eso rompería el render tree del SVG). Exportadas para reuso
-avanzado:
+| API | Descripción |
+| --- | --- |
+| `ViewportService` | Estado reactivo de pan/zoom sobre una content box base, como signals de Angular: `contentBox`, `zoom`, `panX`, `panY`, `minZoom`, `maxZoom`, `viewBox`, `fitScale`, `displayScale`. Métodos `setContentBox()`, `zoomIn()`, `zoomOut()`, `pan()`. |
 
-- **`SvgeRectDirective`**, **`SvgeEllipseDirective`**, **`SvgeLineDirective`**,
-  **`SvgePolygonDirective`**, **`SvgePolylineDirective`**, **`SvgePathDirective`**,
-  **`SvgeTextDirective`**, **`SvgeImageDirective`**, **`SvgeSymbolUseDirective`**.
+`viewBox` es la ventana visible derivada de `contentBox`/`zoom`/`pan`; usa
+`displayScale` (píxeles CSS por unidad de documento) cuando necesites la escala
+física 1:1 en pantalla, p. ej. para mostrar el porcentaje de zoom.
 
-## Viewport
+## Extendiendo el renderer
 
-- **`ViewportService`** — estado de pan/zoom por signals (`zoom`, `panX`, `panY`,
-  `contentBox`, `viewBox`) con APIs `pan`/`zoom`/`reset`/`fit`/`setZoomLimits`. El
-  `<svge-renderer>` lee `viewport.viewBox()` cuando no se pasa un `viewBox`.
+| API | Descripción | Úsalo para |
+| --- | --- | --- |
+| `NodeRendererRegistry` | Registry de componentes de renderizado personalizados, indexados por el `type` del nodo: `register(type, component)`, `unregister(type)`, `resolve(type)`, `registeredTypes()`. Los 10 tipos integrados se despachan directamente; este es el punto de extensión para tipos **nuevos**. | Renderizar tipos de nodo personalizados introducidos por un plugin. |
 
-## Punto de extensión por plugin
+## Utilidades de coordenada & transform
 
-- **`NodeRendererRegistry`** — registra un renderer para un tipo de nodo custom
-  (**D-020**); el dispatcher lo monta vía `*ngComponentOutlet`.
-
-## Utilidades
-
-- **`renderTransformAttr(transform)`** — serializa un `Transform` al atributo SVG
-  `transform` (omite la identidad).
-- **`screenToDoc(svg, clientX, clientY)`** — proyecta píxeles client (pantalla) a
-  coordenadas de documento vía `getScreenCTM().inverse()`.
-- **`projectDocumentToRenderer(...)`** — helper para alimentar un `SvgDocument` al
-  renderer.
+| API | Descripción |
+| --- | --- |
+| `screenToDoc(svg, clientX, clientY)` | Proyecta un píxel de pantalla al espacio de usuario del documento invirtiendo el `getScreenCTM()` en vivo (maneja bien SSR/jsdom/CTM ausente). Devuelve un `Point` o `null`. |
+| `renderTransformAttr(transform)` | Serializa un `Transform` para el atributo `transform` de SVG (p. ej. `matrix(1 0 0 1 10 20)`); devuelve `null` en la identidad. |
 
 :::note
-Esta página lista la superficie pública completa de `render`. Para las firmas
-exactas, mira el [repositorio de la librería](https://github.com/mosaicoo/svg-engine).
+Las directivas de binding por tipo (`[svgeRect]`, `[svgePath]`, …) y el dispatcher
+`SvgeNodeRenderer` se exportan para reuso avanzado, pero el componente
+`<svge-renderer>` ya las conecta por ti — rara vez las necesitarás directamente.
 :::

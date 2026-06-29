@@ -1,52 +1,45 @@
 ---
 title: 'API: optimize'
-description: API pública de @mosaicoo/svg-engine/optimize — o registry de optimizer, passes built-in e optimize command.
+description: API pública de @mosaicoo/svg-engine/optimize — o registry de optimizer, os passes built-in e o comando de otimização com undo.
 ---
 
-`@mosaicoo/svg-engine/optimize` é o **pipeline de otimização** headless: encolhe e
-limpa documentos SVG sem instanciar nenhuma UI de editor. Sem dependência de
-Angular Material/CDK. Os passes built-in são conservadores — nunca alteram o
-render visual.
+`@mosaicoo/svg-engine/optimize` é um pipeline pequeno e plugável de passes
+**puros** documento-para-documento que encolhem e limpam um SVG. Todo passe é livre
+de efeitos colaterais e worker-safe. Headless: sem Angular Material/CDK.
 
 ```ts
 import { OptimizerRegistry, precisionOptimizer } from '@mosaicoo/svg-engine/optimize';
 ```
 
-## Contrato
+## Registry & pipeline
 
-- **`Optimizer`** — `id`/`name`/`order`/`defaultEnabled?` + `optimize(doc): doc`.
+| API | Descrição | Use para |
+| --- | --- | --- |
+| `OptimizerRegistry` | Registry de passes: `register(optimizer)` → `Disposable`, `get(id)`, o signal `optimizers` e `runPipeline(document, enabledIds?)`. | Registrar passes customizados e rodar o pipeline programaticamente. |
+| `Optimizer` | O contrato de passe: `id`, `name`, `description` opcional, `order` (menor roda primeiro; padrão 100), `defaultEnabled` (padrão `true`) e um `optimize(document)` puro. | Implementar seu próprio passe de otimização. |
 
-## Registry
-
-- **`OptimizerRegistry`** — `register`/`get`/`list` + `runPipeline(doc, enabledIds?)`,
-  que ordena os passes por `order` e os encadeia (retorna a mesma referência
-  quando nada muda).
-
-## Comando
-
-- **`OptimizeCommand`** — envolve o `runPipeline` como uma única entrada de undo
-  (para o editor; pode ser ignorado em uso headless).
+`runPipeline` roda os passes habilitados em `order` ascendente. Passe um conjunto
+`enabledIds` para selecionar passes específicos; omita-o para rodar todo passe cujo
+`defaultEnabled` não seja `false`. Retorna um novo documento — ou o original se nada
+mudou.
 
 ## Passes built-in
 
-| Pass | Efeito |
+| Passe | Order | Padrão | O que faz |
+| --- | --- | --- | --- |
+| `precisionOptimizer` | 10 | ligado | Arredonda números de geometria/transform/estilo a uma precisão fixa (padrão 3 casas), removendo ruído de float como `0.30000000000000004`. |
+| `dropDefaultsOptimizer` | 50 | ligado | Remove atributos de apresentação iguais ao default do SVG (`opacity:1`, `visibility:visible`, …). |
+| `pruneEmptyGroupsOptimizer` | — | ligado | Remove grupos vazios da árvore. |
+| `stripAuthoredTitlesOptimizer` | 80 | **desligado** | Diz ao exporter para omitir o `<title>` emitido para nós nomeados (mantém `metadata.name` no modelo; só do lado da exportação, reversível). Opt-in para minificação de produção. |
+
+## Otimização com undo
+
+| API | Descrição |
 | --- | --- |
-| **`precisionOptimizer`** | arredonda numerics para uma precisão fixa |
-| **`dropDefaultsOptimizer`** | remove valores default (`opacity:1`, etc.) |
-| **`pruneEmptyGroupsOptimizer`** | remove `<g>` vazio recursivamente (root preservado) |
-| **`stripAuthoredTitlesOptimizer`** | opt-in — remove `<title>` de nome autoral (follow-up D-072) |
-
-## Exemplo — rodar o pipeline headless
-
-```ts
-const registry = inject(OptimizerRegistry);
-registry.register(precisionOptimizer);
-registry.register(dropDefaultsOptimizer);
-const optimized = registry.runPipeline(doc);
-```
+| `OptimizeCommand` | Encapsula uma execução completa do pipeline como **um** comando com undo (`isDestructive: true`), de modo que otimizar dentro de um editor produz uma única entrada de `Ctrl+Z`. No-op quando o pipeline não muda nada. |
 
 :::note
-O wrapper `builtinOptimizersPlugin` (que auto-registra os passes no boot) fica em
-`@mosaicoo/svg-engine/edit`. Consumidores headless registram passes diretamente ou
-chamam cada `optimize()` em sequência.
+Em uso headless você normalmente chama `registry.runPipeline()` diretamente; o
+`OptimizeCommand` existe para integração com o undo/redo do editor. Veja os
+[comandos do core](/svgengine-site/pt/reference/api/core/#comandos--o-vocabulário-de-mutação).
 :::
