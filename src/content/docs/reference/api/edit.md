@@ -110,7 +110,7 @@ libraries, menus, shortcuts, effects or formats.
 | `PluginRegistry` | Install/uninstall lifecycle: `install`, `uninstall`, `has`, `get`, `list`, `installed` signal. |
 | `PLUGIN_API_VERSION` / `PluginCategory` / `InstalledPlugin` | The current API version, the category union, and the installed-record type. |
 
-For managing and loading plugins (D-083): `PluginManagerService` +
+For managing and loading plugins: `PluginManagerService` +
 `PluginCatalog` + `PluginStateStore` back the plugin-manager UI; `PluginLoader` +
 `providePluginLoader(config)` + `validateExternalPluginManifest()` load **external**
 third-party plugins behind an allowlist + API-version gate (`SVGE_PLUGIN_TRUSTED_ORIGINS`,

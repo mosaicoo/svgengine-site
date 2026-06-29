@@ -110,7 +110,7 @@ bibliotecas, menus, atalhos, efeitos ou formatos.
 | `PluginRegistry` | Ciclo de vida install/uninstall: `install`, `uninstall`, `has`, `get`, `list`, signal `installed`. |
 | `PLUGIN_API_VERSION` / `PluginCategory` / `InstalledPlugin` | A versão atual da API, a união de categorias e o tipo do registro instalado. |
 
-Para gerenciar e carregar plugins (D-083): `PluginManagerService` +
+Para gerenciar e carregar plugins: `PluginManagerService` +
 `PluginCatalog` + `PluginStateStore` dão base à UI do gerenciador de plugins;
 `PluginLoader` + `providePluginLoader(config)` + `validateExternalPluginManifest()`
 carregam plugins **externos** de terceiros atrás de um allowlist + gate de versão da

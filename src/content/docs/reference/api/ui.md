@@ -1,87 +1,86 @@
 ---
 title: 'API: ui'
-description: Public API of @mosaicoo/svg-engine/ui — the Material editor shells, panels, dialogs, tool options and services.
+description: 'Public API of @mosaicoo/svg-engine/ui — the opt-in Material UI tier: drop-in editor shells, panels, dialogs and presentation services.'
 ---
 
-`@mosaicoo/svg-engine/ui` is the **opt-in Material UI layer**: ready-made editor
-shells, panels, dialogs, tool-options components and UI services. This entry point
-(and `ai/nlu-ui`) is the only one that depends on `@angular/material` and
-`@angular/cdk`.
+`@mosaicoo/svg-engine/ui` is the **opt-in Material UI tier**: ready-made editor
+shells, panels, bars, dialogs and presentation services built on Angular Material.
+This entry point (and `ai/nlu-ui`) are the only ones that depend on
+`@angular/material` and `@angular/cdk` — everything below `ui` stays headless.
 
 ```ts
-import { SvgeShellPro } from '@mosaicoo/svg-engine/ui';
+import { SvgeShellPro, provideSvgeUiBuiltins } from '@mosaicoo/svg-engine/ui';
 ```
 
-## Shells
+## Drop-in shells
 
-- **`SvgeShellPro`** — the full professional drop-in editor (`<svge-shell-pro>`).
-- **`SvgeEditor`** — the configurable editor shell (`<svge-editor>`).
+The fastest way to get a working editor: mount one component.
 
-## Bars
+| Component | Selector | What it is |
+| --- | --- | --- |
+| `SvgeShellPro` | `<svge-shell-pro>` | The professional editor: menu bar + toolbar + tool options + tools palette + canvas + context menu + layers + inspector + status bar, wired together. |
+| `SvgeEditor` | `<svge-editor>` | A configurable shell (background + renderer + overlays + toolbar, optional status bar) with toggleable pieces — from headless-pure to a complete shell. |
 
-- **`SvgeMenuBar`**, **`SvgeToolbar`**, **`SvgeStatusBar`** (+ **`StatusBarSection`**,
-  **`STATUS_BAR_SECTIONS`**), **`SvgeToolsPalette`**, **`SvgeToolOptions`**,
-  **`SvgeContextMenu`** (+ **`SvgeContextMenuTrigger`**, **`SvgeContextMenuService`**,
-  **`ContextMenuSlot`**, **`CONTEXT_MENU_SLOT`**, **`MENU_SLOT`**, **`MenuBarSlot`**).
+## Setup
 
-## Panels
+| API | Description |
+| --- | --- |
+| `provideSvgeUiBuiltins()` | Installs the UI-side built-in plugins (Material dialogs, the tool-options registry). Call it after `provideSvgEngineEditorBuiltins()` to complete the Material tier. |
 
-- **`SvgeInspector`**, **`LayersPanel`**, **`SvgeColorPalette`**, **`SvgeColorPicker`**,
-  **`SvgeGradientEditor`**, **`SvgeEffectsPanel`**, **`SvgeLibrariesPanel`**,
-  **`SvgePagesPanel`**, **`SvgeHistoryPanel`** (+ **`SnapshotsPanel`**),
-  **`SvgeAssetExportPanel`**, **`SvgePanelGroup`** (+ **`SvgePanelGroupTab`**),
-  **`SvgeIsolationBreadcrumb`**, **`SvgeRulers`**, **`SvgeTimeline`**,
-  **`SvgeDocumentSettings`**, **`SvgeWorkspaceSettings`**, **`SvgePluginManager`**,
-  **`SvgeThemeToggle`**.
+## Panels & bars
 
-## Tool options
+Compose your own layout from these standalone components instead of using a shell.
 
-A component per tool, plus the registry and provider:
-
-- **`ToolOptionsRegistry`**, **`provideSvgeBuiltinToolOptions`**, **`TOOL_OPT_SHARED_STYLES`**.
-- **`SvgeSelectToolOptions`**, **`SvgeDirectSelectOptions`**, **`SvgePenToolOptions`**,
-  **`SvgePencilToolOptions`**, **`SvgeRectangleOptions`**, **`SvgeEllipseOptions`**,
-  **`SvgePolygonOptions`**, **`SvgeTextToolOptions`**, **`SvgeEyedropperToolOptions`**,
-  **`SvgeKnifeToolOptions`**, **`SvgeSmoothToolOptions`**, **`SvgeGradientToolOptions`**,
-  **`SvgeWidthToolOptions`**, **`SvgeSymbolSprayerOptions`**.
+| Component | Selector | Purpose |
+| --- | --- | --- |
+| `LayersPanel` | `<svge-layers-panel>` | Layers tree with drag-and-drop hierarchy. |
+| `SvgeInspector` | `<svge-inspector>` | Property inspector for the selected nodes. |
+| `SvgeColorPalette` | `<svge-color-palette>` | Swatch grid; emits `colorPicked` on click. |
+| `SvgeColorPicker` | `<svge-color-picker>` | Full-featured color picker. |
+| `SvgeGradientEditor` | `<svge-gradient-editor>` | Edit the active gradient's stops/kind. |
+| `SvgeEffectsPanel` | `<svge-effects-panel>` | Effects/filters panel. |
+| `SvgeLibrariesPanel` | `<svge-libraries-panel>` | Unified surface for the asset libraries (shapes, templates, gradients, patterns, styles, assets). |
+| `SvgePagesPanel` | `<svge-pages-panel>` | Browser-style tabs for pages/artboards (auto-hides with zero pages). |
+| `SvgeHistoryPanel` | `<svge-history-panel>` | Linear command history with click-to-time-travel (`CommandBus.goto()`). |
+| `SnapshotsPanel` | `<svge-snapshots-panel>` | Named, restorable document checkpoints. |
+| `SvgeAssetExportPanel` | `<svge-asset-export-panel>` | Batch-export UI over the edit-side asset-export registry. |
+| `SvgeTimeline` | `<svge-timeline>` | Animation timeline dock (ruler + per-track keyframes + playhead). |
+| `SvgeMenuBar` / `SvgeToolbar` / `SvgeStatusBar` | `<svge-menu-bar>` / `<svge-toolbar>` / `<svge-status-bar>` | The menu bar, a slot-driven icon toolbar, and the status bar (tool/selection/zoom/snap). |
+| `SvgeToolsPalette` / `SvgeToolOptions` | `<svge-tools-palette>` / `<svge-tool-options>` | The tools palette and the host that renders the active tool's options. |
+| `SvgeRulers` / `SvgeIsolationBreadcrumb` / `SvgePluginManager` | — | Rulers, the isolation-mode breadcrumb, and the plugin manager (list/enable/disable/uninstall). |
 
 ## Dialogs
 
-- Shell & config: **`SvgeDialogShell`**, **`svgeDialogConfig`**, **`SvgeDialogSize`**,
-  **`SVGE_DIALOG_MAX_HEIGHT`**.
-- Dialogs + opener services: **`SvgeAboutDialog`** / **`SvgeAboutDialogService`**,
-  **`SvgeCommandPaletteDialog`** / **`SvgeCommandPaletteService`**,
-  **`SvgeFindReplaceDialog`** / **`SvgeFindReplaceDialogService`**,
-  **`SvgeKeyboardShortcutsDialog`** / **`SvgeKeyboardShortcutsDialogService`**,
-  **`SvgeNumberPromptDialog`** / **`SvgeNumberPromptDialogService`** (+ **`NumberPromptDialogData`**),
-  **`SvgeSmartObjectEditorDialog`** / **`SvgeSmartObjectEditorDialogService`** (+ **`SmartObjectEditorDialogData`**),
-  **`SvgeSvgSourceDialog`** / **`SvgeSvgSourceDialogService`**,
-  **`SvgeTraceImageDialog`** / **`SvgeTraceImageDialogService`** (+ **`TraceImageDialogData`**, **`TraceImageDialogResult`**),
-  **`SvgeTransformDialog`** / **`SvgeTransformDialogService`** (+ **`TransformDialogData`**, **`TransformDialogMode`**, **`TransformDialogResult`**),
-  **`SvgeCodeGeneratorDialog`** / **`SvgeCodeGeneratorDialogService`**,
-  **`SvgePluginManagerDialog`** / **`SvgePluginManagerDialogService`**,
-  **`SvgeDocumentSettingsDialogService`**, **`SvgeWorkspaceSettingsDialogService`**.
+Inject a dialog service and call `.open()` to launch a managed Material dialog.
+
+| Service | Opens |
+| --- | --- |
+| `SvgeCommandPaletteService` | The command palette (fuzzy search over every registered menu command). |
+| `SvgeTransformDialogService` | Object ▸ Transform (rotate/scale/skew by exact amounts). |
+| `SvgeCodeGeneratorDialogService` | The code-generation dialog (React JSX/component/Data URI preview + copy). |
+| `SvgeFindReplaceDialogService` | Find & Replace over node text/properties. |
+| `SvgeKeyboardShortcutsDialogService` | The shortcuts manager (rebind/unbind/reset with conflict warnings). |
+| `SvgeSvgSourceDialogService` | The SVG source viewer. |
+| `SvgeSmartObjectEditorDialogService` | The smart-object contents editor. |
+| `SvgeTraceImageDialogService` | The trace-image options dialog (threshold/tolerance/min-points). |
+| `SvgeWorkspaceSettingsDialogService` / `SvgeDocumentSettingsDialogService` | Workspace and document settings. |
+| `SvgeAboutDialogService` | The About dialog. |
 
 ## Services
 
-- **`ThemeService`** (+ **`Theme`**, **`ResolvedTheme`**), **`WorkspaceLayoutService`**,
-  **`ColorHistoryService`**.
-
-## Pipes & color utilities
-
-- Pipes: **`RectFieldPipe`**, **`EllipseFieldPipe`**, **`LineFieldPipe`**.
-- Color: **`HSV`**, **`RGB`**, **`hsvToRgb`**, **`rgbToHsv`**, **`hexToRgb`**,
-  **`formatHex`**, **`formatHsvAsHex`**, **`parseHex`**, **`parseHexToHsv`**.
-- Menu/palette helpers: **`humanizeMenuSlot`**, **`filterPaletteCommands`**,
-  **`scorePaletteCommand`**, **`PaletteCommandLike`**.
-
-## Providers & plugins
-
-- **`provideSvgeUiBuiltins`**, **`builtinUiMenuContributionsPlugin`**,
-  **`codeGeneratorsPlugin`**, **`provideSvgeBuiltinToolOptions`**.
-- Constant: **`STORAGE_KEY`**.
+| API | Description |
+| --- | --- |
+| `ThemeService` | Theme management (`system`/`light`/`dark`), persisted to localStorage and applied to `<html data-theme>`: `setTheme()`, `cycle()`, `theme`/`resolved` signals. |
+| `ColorHistoryService` | Most-recently-used colors (16-entry MRU ring, de-duped, persisted): `add(hex)`, `clear()`, `history` signal. |
+| `WorkspaceLayoutService` | Persisted panel/dock layout for the shell. |
+| `SvgeContextMenuService` | Open context menus programmatically. |
 
 :::note
-Most of these UI symbols are not individually listed in the library's
-`docs/09-api-publica.md`; this page reflects the current export surface.
+`ui` also exports building blocks the shells use internally: the per-tool
+*ToolOptions* components + `ToolOptionsRegistry` + `provideSvgeBuiltinToolOptions()`,
+the inspector field pipes (`RectFieldPipe`, …), color-math utilities
+(`hsvToRgb`, `parseHex`, …), the dialog shell (`SvgeDialogShell`,
+`svgeDialogConfig`), slot constants (`MENU_SLOT`, `STATUS_BAR_SECTIONS`, …) and
+`builtinUiMenuContributionsPlugin`. You normally consume these through the shells
+and dialogs above rather than directly.
 :::

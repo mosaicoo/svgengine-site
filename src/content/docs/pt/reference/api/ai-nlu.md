@@ -1,87 +1,75 @@
 ---
 title: 'API: ai/nlu'
-description: API pública de @mosaicoo/svg-engine/ai/nlu — o engine de linguagem natural rule-based, dicionários, matchers fuzzy e provider LLM opcional.
+description: API pública de @mosaicoo/svg-engine/ai/nlu — o engine de linguagem natural headless que transforma comandos em texto em ações do editor, com camada LLM local opcional.
 ---
 
-`@mosaicoo/svg-engine/ai/nlu` é a **camada de linguagem natural opt-in** (headless):
-um engine rule-based que transforma texto em comandos do editor, com dicionários
-PT/EN, fuzzy matching, extração de slots e um provider LLM local opcional. Sem
-dependência de Angular Material/CDK.
+`@mosaicoo/svg-engine/ai/nlu` é a **camada de linguagem natural opt-in** (headless,
+sem Material/CDK). Ela transforma uma frase como "desenhe um círculo vermelho" numa
+ação do editor: um engine baseado em regras casa o texto com intents registrados,
+extrai slots e retorna candidatos ranqueados ou auto-executa o melhor. Uma camada de
+LLM local opcional cuida do que as regras não dão conta.
 
 ```ts
 import { NaturalLanguageService, builtinNluPlugin } from '@mosaicoo/svg-engine/ai/nlu';
 ```
 
-## Engine
+## O engine
 
-- **`NaturalLanguageService`** — `parse(text, ctx)` → intent + slots (regex +
-  dicionários + fuzzy match).
-- **`NluDictionaryRegistry`** — registra dicionários customizados.
-- **`builtinNluPlugin`** — auto-descobre intents de menu + traz intents customizados.
+| API | Descrição | Use para |
+| --- | --- | --- |
+| `NaturalLanguageService` | O registry de intents + matcher. `registerIntent(intent)` → `Disposable`; `parse(text, ctx, opts?)` retorna `NluCandidate[]` ranqueados; `execute(text, ctx, opts?)` faz parse e auto-executa o melhor quando confiante; signals `intents`/`intentsCount`. | Registrar intents e transformar texto em ações do editor. |
+| `builtinNluPlugin` | Um plugin (instale via `provideSvgEnginePlugin(builtinNluPlugin)`) que auto-descobre todo comando de menu como intent e adiciona built-ins como `create-shape`, `set-fill`, `move-selected`, `resize-selected`, `duplicate-selected`. | Ter um vocabulário de comandos funcional de imediato. |
+| `discoverMenuIntents(...)` / `discoverMenuIntentsReactive(...)` | Convertem entradas do `MenuContributionRegistry` em intents — uma vez, ou continuamente conforme plugins são instalados. | Expor seus menus à linguagem natural automaticamente. |
+
+```ts
+const nlu = inject(NaturalLanguageService);
+const result = await nlu.execute('desenhe um círculo vermelho', { injector });
+if (!result.executed) console.log(result.rejection); // por que não rodou
+```
 
 ## Tipos centrais
 
-- **`NluIntent`**, **`NluCandidate`**, **`NluContext`**, **`NluParseOptions`**,
-  **`NluExecuteOptions`**, **`NluExecuteResult`**, **`NluMatchReason`**,
-  **`NluLanguage`**, **`NluShapeKind`**, **`NluSlotSchema`**, **`ExtractContext`**,
-  **`ExtractedSlots`**.
+| Tipo | Descrição |
+| --- | --- |
+| `NluIntent` | Definição de intent: `id`, `keywords`, opcionais `actionKeywords`/`slots`/`destructive`/`description`, e `execute(slots, ctx)`. |
+| `NluContext` | O contexto por-chamada — carrega o `injector` para o intent resolver serviços do editor. |
+| `NluCandidate` | Um resultado de parse: o `intent` casado, uma `confidence` em [0,1], os `slots` extraídos e os `matches` que o explicam. |
+| `NluSlotSchema` | A forma de um slot: `number`, `color`, `shape`, `enum`, `string`, `point` ou `gradient`, com `optional`/`default`/anchor keywords. |
+| `NluParseOptions` | `threshold` (padrão 0.3) e `maxResults` (padrão 5). |
+| `NluExecuteOptions` | Adiciona `autoExecuteThreshold` (padrão 0.7) e `confirmGate` (hook de confirmação — obrigatório para intents `destructive`). |
+| `NluExecuteResult` | O resultado: `executed`, o `candidate`, `alternatives`, e um motivo de `rejection` (`no-match`, `below-threshold`, `confirmation-declined`, `destructive-no-gate`, `execute-error` ou `null`). |
+| `NluLanguage` | Idioma detectado: `pt`, `en` ou `unknown`. |
 
-## Tokenização & fuzzy matching
+## Camada LLM opcional
 
-- **`tokenize`**, **`tokenizeWithoutStopwords`**, **`deaccent`**, **`normalize`**,
-  **`levenshtein`**, **`fuzzyMatchToken`**, **`fuzzyMatchAll`**, **`fuzzyMatchAny`**,
-  **`bestMatch`**, **`adaptiveMaxDistance`**, **`FuzzyMatch`**.
-- Stopwords: **`isStopword`**, **`STOPWORDS`**, **`STOPWORDS_EN`**, **`STOPWORDS_PT`**.
-- Gate de vagueza: **`isVagueForRuleBased`**, **`VAGUE_MIN_MEANINGFUL_TOKENS`**,
-  **`VAGUE_RECOGNIZED_FRACTION`**.
+Para pedidos que o engine de regras não resolve, escale para um LLM de chat (ex.: um
+servidor [Ollama](https://ollama.com) local). O contrato é plugável.
 
-## Dicionários
-
-- Ações: **`ACTION_DICTIONARY`**, **`ACTION_DICTIONARY_EN`**, **`ACTION_DICTIONARY_PT`**,
-  **`ACTION_KEYS`**, **`resolveActionCanonical`** (+ **`ActionCanonical`**).
-- Cores: **`COLOR_DICTIONARY`**, **`COLOR_DICTIONARY_EN`**, **`COLOR_DICTIONARY_PT`**,
-  **`COLOR_KEYS`**, **`resolveColorName`**.
-- Shapes: **`SHAPE_DICTIONARY`**, **`SHAPE_DICTIONARY_EN`**, **`SHAPE_DICTIONARY_PT`**,
-  **`SHAPE_KEYS`**, **`resolveShapeKind`**.
-- Números: **`NUMBER_WORDS`**, **`resolveNumberWord`**; diversos **`COMPOSITE_KEYWORDS`**,
-  **`CORE_INTENT_ID_HINTS`**.
-
-## Extração de slots & parsing de cor
-
-- **`extractSlots`**, **`extractSvgBlob`**, **`parseColorPhrase`** (+ **`ColorPhraseMatch`**),
-  **`parseColorToken`**, **`parseDimensionToken`**, **`parseNumberToken`**,
-  **`parseHslFunction`**, **`parseRgbFunction`**.
-- Matemática de cor: **`hexToRgb`**, **`rgbToHsl`**, **`hslToRgb`**, **`adjustHexLightness`**,
-  **`lightenHex`**, **`darkenHex`**, **`HEX_COLOR_RE`**, **`LIGHTNESS_MODIFIERS`**,
-  **`LIGHTNESS_MULTIPLIERS`**.
-
-## Detecção de idioma & descoberta de menu
-
-- **`detectLanguage`** (+ **`LanguageDetectResult`**).
-- **`discoverMenuIntents`**, **`discoverMenuIntentsReactive`** (+
-  **`DiscoverMenuIntentsResult`**, **`DiscoverMenuIntentsReactiveResult`**),
-  **`menuContributionToIntent`**.
-
-## Provider LLM (opcional)
-
-Um fallback de chat-LLM plugável (ex.: Ollama local):
-
-- Contrato: **`AiChatProvider`**, **`AiChatMessage`**, **`AiChatOptions`**,
-  **`AiChatRole`**, **`AI_CHAT_PROVIDER`**.
-- Ollama: **`provideOllamaChat`**, **`OllamaChatProvider`**, **`OllamaChatConfig`**,
-  **`DEFAULT_OLLAMA_BASE_URL`**, **`DEFAULT_OLLAMA_MODEL`**, **`DEFAULT_OLLAMA_MODELS`**.
-- Resolver: **`LlmIntentResolverService`**, **`LlmExecuteOptions`**,
-  **`LlmResolveOptions`**, **`LlmResolvedPlan`**, **`LlmResolvedStep`**,
-  **`LlmRawSvgResult`**, **`LlmRawSvgInsertResult`**, **`LlmIntentCatalogEntry`**,
-  **`parsePlan`**, **`DEFAULT_CATALOG_MAX_ENTRIES`**.
+| API | Descrição |
+| --- | --- |
+| `AiChatProvider` / `AI_CHAT_PROVIDER` | O contrato do backend LLM (`chat(messages, opts?)`, `isConfigured`, `defaultModel`) e seu token de injeção (padrão nenhum). |
+| `provideOllamaChat(config?)` | Conecta o provider Ollama built-in. Config: `baseUrl`, `model`, `models`. |
+| `DEFAULT_OLLAMA_BASE_URL` / `DEFAULT_OLLAMA_MODEL` / `DEFAULT_OLLAMA_MODELS` | Padrões: `http://localhost:11434`, `qwen2.5:3b`, e uma pequena lista de modelos Qwen sugeridos. |
+| `LlmIntentResolverService` | A camada de escalada: `resolvePlan(text, ctx)` pede ao LLM para quebrar um pedido complexo num plano de intents em múltiplos passos; `resolveAndExecute(text, ctx)` o executa. |
+| `AiChatMessage` / `AiChatOptions` | A mensagem de chat (`role`, `content`) e as opções por-chamada (`model`, `format`, `temperature`, …). |
 
 ## Contrato de voz
 
-- **`VoiceProvider`**, **`VoiceEngine`**, **`VOICE_WHISPER_PROVIDER`** — o contrato
-  de provider implementado por `ai/nlu-ui` (Web Speech) e `ai/nlu-voice-wasm`
-  (Whisper).
+O `ai/nlu` define o contrato do provider de voz; as implementações de fato vivem em
+`ai/nlu-ui` (Web Speech) e `ai/nlu-voice-wasm` (Whisper on-device).
+
+| API | Descrição |
+| --- | --- |
+| `VoiceProvider` | Um provider de reconhecimento de fala: signals `isSupported`/`listening`/`lastError`, `listen(lang?, options?)` → transcrição, `stop()`. |
+| `VoiceEngine` | Qual engine usar: `web-speech`, `whisper` ou `auto`. |
+| `VOICE_WHISPER_PROVIDER` | Token de injeção do provider Whisper opcional (padrão nenhum). |
 
 :::note
-A maioria dessas APIs não está listada individualmente em
-`docs/09-api-publica.md`; esta página reflete a superfície de exports atual.
+O `ai/nlu` também exporta as peças de baixo nível das quais o engine é feito —
+tokenização & fuzzy matching (`tokenize`, `levenshtein`, `bestMatch`, …), os
+dicionários PT/EN (`COLOR_DICTIONARY`, `SHAPE_DICTIONARY`, `ACTION_DICTIONARY`, …),
+matemática de cor, parsers de slot e `detectLanguage`. São úteis para construir
+intents customizados, mas desnecessárias no uso cotidiano. O
+[repositório da biblioteca](https://github.com/mosaicoo/svg-engine) é autoritativo
+para as assinaturas exatas.
 :::
