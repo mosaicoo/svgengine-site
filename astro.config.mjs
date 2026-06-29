@@ -178,6 +178,20 @@ export default defineConfig({
             },
           ],
         },
+        {
+          label: 'API reference',
+          translations: { 'pt-BR': 'Referência da API', es: 'Referencia de la API' },
+          items: [
+            {
+              label: 'Overview',
+              translations: { 'pt-BR': 'Visão geral', es: 'Resumen' },
+              slug: 'reference/api',
+            },
+            { label: 'render', slug: 'reference/api/render' },
+            { label: 'io', slug: 'reference/api/io' },
+            { label: 'optimize', slug: 'reference/api/optimize' },
+          ],
+        },
       ],
     }),
   ],
