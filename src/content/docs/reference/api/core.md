@@ -1,189 +1,216 @@
 ---
 title: 'API: core'
-description: Public API of @mosaicoo/svg-engine/core — the headless model, tree ops, commands, services, geometry, pages and animation.
+description: Public API of @mosaicoo/svg-engine/core — the headless engine for building, mutating and querying an SVG document programmatically.
 ---
 
-`@mosaicoo/svg-engine/core` is the **headless engine**: the immutable data model,
-tree operations, the document type, the command pattern, signal-based services,
-geometry helpers, page metadata and the animation model. Zero Angular
-Material/CDK dependency.
+`@mosaicoo/svg-engine/core` is the **headless engine**. It has no dependency on
+`@angular/material` or `@angular/cdk`, so you can use it in a full editor, a
+read-only viewer, a Node/SSR pipeline or a CLI — anywhere you need to build,
+mutate and query an SVG document programmatically.
 
 ```ts
-import { createRect, CommandBus, type SvgDocument } from '@mosaicoo/svg-engine/core';
+import {
+  createEmptyDocument, createRect,
+  EditorStateService, CommandBus, InsertNodeCommand, AUTO_PARENT,
+} from '@mosaicoo/svg-engine/core';
 ```
 
-This page lists the full public surface, grouped by area. For exact signatures,
-the [library repository](https://github.com/mosaicoo/svg-engine) is authoritative.
+## How it fits together
 
-## Model & node types
+The data model is **immutable**: factories and tree operations always return new
+objects. You never mutate the document directly — instead you **dispatch
+commands** through the `CommandBus`, which applies the change and records it for
+undo/redo. The current document lives in `EditorStateService` as Angular signals.
 
-The document tree is a discriminated union of immutable nodes.
+```ts
+const state = inject(EditorStateService);
+const bus = inject(CommandBus);
 
-- **`SvgNode`** — the union; **`SvgNodeBase`**, **`SvgNodeType`**, **`SVG_NODE_TYPES`**.
-- Variants: **`RectNode`**, **`EllipseNode`**, **`LineNode`**, **`PolygonNode`**,
-  **`PolylineNode`**, **`PathNode`**, **`TextNode`** (+ **`TextRun`**),
-  **`ImageNode`**, **`GroupNode`**, **`SymbolUseNode`**.
-- Style & metadata: **`SvgStyle`**, **`SvgMetadata`**, **`NodeId`**.
-- Defaults: **`DEFAULT_STYLE`**, **`EMPTY_STYLE`**, **`EMPTY_METADATA`**,
-  **`STYLE_PROPERTY_NAMES`**, **`TRANSFORM_PROPERTY_NAMES`**.
+state.resetDocument(createEmptyDocument({ width: 800, height: 600 }));
 
-## Document
+const rect = createRect({ x: 10, y: 10, width: 120, height: 80 });
+bus.dispatch(new InsertNodeCommand(rect, AUTO_PARENT)); // undoable
+bus.undo();
+```
 
-- **`SvgDocument`** — the document (id, viewBox, root group).
-- **`createEmptyDocument(opts?)`** + **`CreateDocumentOptions`**, **`DEFAULT_VIEW_BOX`**.
+## Document & state services
 
-## Factories
+The services are Angular `@Injectable`s — inject them where you need them.
 
-Construct nodes immutably:
+| API | Description | Use it to |
+| --- | --- | --- |
+| `EditorStateService` | Single source of truth for the edited document, exposed as readonly signals (`document`, `dirty`, `nodeCount`, `allNodes`). | Read the current document reactively; seed/replace it with `resetDocument()` / `setDocument()`; `markClean()` after a save. |
+| `CommandBus` | The one gateway for **all** mutations. `dispatch(command)` runs the change and records history; also `undo()`, `redo()`, `goto(depth)`. | Apply any change to the document with undo/redo support. |
+| `HistoryService` | The undo/redo bookkeeping behind the bus: `undoStack`, `redoStack`, `canUndo`, `canRedo`, `setMaxSize()`. | Drive undo/redo UI state and cap history depth. |
+| `createEmptyDocument(options?)` | Build a fresh, empty `SvgDocument` with a root group. | Create the initial document to seed `EditorStateService`. |
+| `SvgDocument` | The immutable top-level container: `viewBox`, optional `width`/`height`, the editable `root` tree, `defs`, `exportPreferences`. | The type you read from `state.document()` and pass to renderers/exporters. |
+| `CreateDocumentOptions` / `DEFAULT_VIEW_BOX` | Options (`viewBox`, `width`, `height`) for `createEmptyDocument`, and the 800×600 fallback viewBox. | Configure the initial canvas size. |
 
-- **`createRect`**, **`createEllipse`**, **`createLine`**, **`createPolygon`**,
-  **`createPolyline`**, **`createPath`**, **`createText`**, **`createImage`**,
-  **`createGroup`**, **`createSymbolUse`** — all accept **`NodeFactoryOptions`**.
-- IDs: **`generateNodeId()`**, **`toNodeId(value)`**.
+## Building nodes
 
-## Tree operations (immutable, structural sharing)
+Every shape is created with a factory. All accept a shared `NodeFactoryOptions`
+(`id?`, `transform?`, `style?`, `metadata?`); shapes default to `DEFAULT_STYLE`,
+groups to `EMPTY_STYLE`.
 
-- **`findNodeById`**, **`findParent`**, **`insertNode`**, **`removeNode`**,
-  **`updateNode`**, **`walk`**, **`collectNodes`**, **`countNodes`**,
-  **`isGroupNode`**, **`cloneNodeWithNewIds`**.
-- Parent resolution: **`ParentRef`**, **`AUTO_PARENT`**, **`InsertParentResolver`**,
-  **`INSERT_PARENT_RESOLVER`**.
+| Factory | Creates |
+| --- | --- |
+| `createRect({ x, y, width, height, rx?, ry? })` | A rectangle (optionally rounded). |
+| `createEllipse({ cx, cy, rx, ry })` | An ellipse / circle. |
+| `createLine({ x1, y1, x2, y2 })` | A straight line. |
+| `createPolygon(points)` / `createPolyline(points)` | A closed polygon / open polyline from a list of `Point`s. |
+| `createPath(d)` | A path from an SVG `d` string. |
+| `createText({ x, y, content, fontSize?, fontFamily?, ... })` | A text element. |
+| `createImage({ x, y, width, height, href })` | A raster `<image>`. |
+| `createGroup(children?)` | A container group (the building block of layers, pages and smart objects). |
+| `createSymbolUse({ symbolId, x, y })` | An instance of a registered symbol (`<use href="#…">`). |
 
-## Geometry
+## The node model
 
-- **Point**: **`Point`**, **`ORIGIN`**.
-- **Bounding box**: **`BoundingBox`**, **`bbox`**, **`unionBBox`**,
-  **`containsPoint`**, **`intersectsBBox`**, **`getNodeBBox`**, **`getNodesWorldBBox`**.
-- **Transform**: **`Transform`**, **`IDENTITY_TRANSFORM`**, **`translate`**,
-  **`scale`**, **`rotate`**, **`skewX`**, **`skewY`**, **`multiply`**, **`invert`**,
-  **`applyTransform`**, **`isIdentity`**, **`isIdentityOrTranslate`**,
-  **`composeTransform`**, **`parseTransformAttr`**; decomposition via
-  **`decomposeTransform`** / **`DecomposedTransform`**; pivot composition via
-  **`composeAnchoredScale`**, **`composePivotRotation`**, **`composePivotFlip`**,
-  **`composePivotSkew`**.
-- **Scale-bake** (resize bakes real geometry): **`bakeScaleIntoNode`** and the
-  per-type **`bakeRect`** / **`bakeEllipse`** / **`bakeLine`** / **`bakePolygon`** /
-  **`bakePolyline`** / **`bakePath`** / **`bakeText`** / **`bakeImage`** /
-  **`bakeGroup`** / **`bakePathD`** / **`bakeTransformIntoPathD`**;
-  **`scaleAxisInterval`**, **`scalePoint`**, **`scalePathSegments`**.
+| API | Description |
+| --- | --- |
+| `SvgNode` | Discriminated union of every node type; the `type` field narrows to the concrete shape (`RectNode`, `PathNode`, `GroupNode`, …). |
+| `SvgNodeBase` | The fields every node shares: `id`, `transform`, `style`, `metadata` (all `readonly`). |
+| `SvgNodeType` / `SVG_NODE_TYPES` | The literal union (and tuple) of valid `type` discriminators. |
+| `isGroupNode(node)` | Type guard narrowing a node to `GroupNode`. |
 
-## Paths & anchors
+## Reading & transforming the tree
 
-- **Anchors**: **`AnchorKind`** (cusp/smooth/symmetric), **`AnchorPoint`**,
-  **`AnchorSubpath`**, **`AnchorRef`**, **`classifyAnchorKind`**,
-  **`parsePathToAnchors`**, **`anchorsToPathD`**, **`simplifyAnchorSubpath`**.
-- **Path data**: **`PathCmd`**, **`PathSegment`**, **`parsePathD`**,
-  **`serializePathD`**, **`flattenPathD`**, **`nodeToPathD`**, **`ringsToPathD`**,
-  **`FlatRing`**.
-- **Path ops**: **`roundPathCorners`**, **`offsetPathD`** (+ **`offsetPolyline`**,
-  **`offsetClosedRing`**, **`DEFAULT_OFFSET_DISTANCE`**), **`outlineStrokeToPathD`**,
-  **`reversePathD`**, **`joinPathDs`**, **`splitPathDAtAnchors`**,
-  **`splitPathDIntoSubpaths`** (+ **`PathSplitCut`**), **`simplifyPathD`**
-  (+ **`DEFAULT_SIMPLIFY_TOLERANCE`**), **`cleanUpPathD`**.
+Pure functions over the immutable tree — each returns a **new** root with
+structural sharing (only the path to the changed node is reallocated).
 
-## Color & defs
+| API | Description |
+| --- | --- |
+| `findNodeById(root, id)` | Find a node by id, or `null`. |
+| `findParent(root, childId)` | Find a node's parent group, or `null`. |
+| `walk(root, visitor)` / `collectNodes(root)` / `countNodes(root)` | Traverse, flatten or count the tree. |
+| `insertNode(root, parentId, node, index?)` | Return a new tree with `node` inserted (throws on duplicate id). |
+| `removeNode(root, id)` | Return a new tree with the node removed. |
+| `updateNode(root, id, updater)` | Return a new tree with the node replaced by `updater(node)` (same `id`/`type` enforced). |
+| `cloneNodeWithNewIds(node)` | Deep-clone a subtree with fresh ids (e.g. for duplication). |
 
-- **`parseColor`**, **`mixColor`**, **`unwrapUrlRef`**.
-- **`appendDef`**, **`extractDefById`**, **`removeDefById`**.
+:::tip
+These functions are the low-level primitives. For **undoable** edits in an editor,
+prefer the equivalent commands (below) over calling these directly.
+:::
 
-## Pages (metadata layer)
+## Geometry & transforms
 
-- Predicates & accessors: **`isPage`**, **`getPageViewBox`**, **`getPageName`**,
-  **`getPageOptions`**, **`getPageBackgroundNode`**.
-- Builders: **`withPageFlag`**, **`withoutPageFlag`**, **`withPageName`**,
-  **`withPageViewBox`**, **`withPageOptions`**.
-- Types & formats: **`PageOptions`**, **`PageBackground`**, **`PageMargins`**,
-  **`PageFormat`**, **`PageOrientation`**, **`PAGE_FORMAT_SIZES`**,
-  **`pageFormatSize`**, **`detectPageFormat`**, **`pageOrientationFromSize`**,
-  **`DEFAULT_PAGE_OPTIONS`**, **`PAGE_BACKGROUND_IMAGE_PAR`**.
-- Keys: **`SVGE_PAGE_NAME_KEY`**, **`SVGE_PAGE_OPTIONS_KEY`**, **`SVGE_PAGE_VIEWBOX_KEY`**.
+| API | Description |
+| --- | --- |
+| `Point` / `ORIGIN` | An immutable 2D point; `{x:0, y:0}`. |
+| `BoundingBox` + `bbox(x,y,w,h)` | An axis-aligned box and its constructor. |
+| `unionBBox(a,b)` / `intersectsBBox(a,b)` / `containsPoint(box,x,y)` | Combine boxes, test overlap, test point containment (used e.g. for hit-testing and viewport culling). |
+| `getNodeBBox(node)` / `getNodesWorldBBox(nodes)` | Compute a node's bounding box (and the union for a selection). |
+| `Transform` / `IDENTITY_TRANSFORM` | The immutable 6-element affine matrix matching SVG's `matrix(a,b,c,d,e,f)`. |
+| `translate` / `scale` / `rotate` / `skewX` / `skewY` | Build the common transforms (rotation/skew in radians). |
+| `multiply(a,b)` / `invert(m)` / `applyTransform(m,x,y)` | Compose, invert, and apply a transform to a point. |
+| `parseTransformAttr(attr)` | Parse an SVG `transform` attribute string into a `Transform`. |
 
-## Node kinds (layers, smart objects, live booleans)
+## Identity & style types
 
-- Layers: **`isLayer`**, **`withLayerFlag`**, **`withoutLayerFlag`**.
-- Smart objects: **`isSmartObject`**, **`withSmartObjectFlag`**, **`withoutSmartObjectFlag`**.
-- Live booleans: **`isLiveBooleanGroup`**, **`getLiveBooleanOp`**, **`LiveBooleanOp`**,
-  **`LIVE_BOOLEAN_KEY`**, **`LIVE_BOOLEAN_ROLE_KEY`**.
-- Clip/mask: **`ClipMaskKind`**.
-- Kind keys: **`SVGE_KIND_KEY`**, **`SVGE_KIND_LAYER`**, **`SVGE_KIND_PAGE`**,
-  **`SVGE_KIND_SMART_OBJECT`**.
+| API | Description |
+| --- | --- |
+| `NodeId` + `toNodeId(s)` / `generateNodeId()` | The branded node-id type; coerce an external string, or mint a fresh unique id. |
+| `SvgStyle` / `EMPTY_STYLE` / `DEFAULT_STYLE` | The subset of SVG presentation attributes treated as style, plus the empty and default-shape presets. |
+| `SvgMetadata` / `EMPTY_METADATA` | Editor-facing per-node metadata: `name`, `locked`, `visible`, `customData`. |
+| `Disposable` | The cleanup contract returned by every registry `register*()` call, so plugins can undo their contributions. |
 
-## Custom attributes
+## Commands — the mutation vocabulary
 
-- **`CustomAttrs`**, **`hasCustomAttrs`**, **`readCustomAttrs`**, **`setCustomAttr`**,
-  **`removeCustomAttr`**, **`renameCustomAttr`**, **`withCustomAttrs`**,
-  **`customAttrToDataName`**, **`dataNameToCustomAttr`**, **`isValidCustomAttrName`**,
-  **`SVGE_CUSTOM_ATTRS_KEY`**, **`CUSTOM_ATTR_DATA_PREFIX`**.
+Commands are plain classes: construct one with its data and `bus.dispatch()` it.
+Each is reversible (undo/redo). `Command`, `CommandContext`, `CommandResult` and
+the `ok()` / `fail()` helpers form the contract; `AUTO_PARENT` tells insertion
+commands to use the current implicit parent.
 
-## Commands
+**Structure & ordering**
 
-Every mutation is a `Command`. Dispatch them through the `CommandBus` (below) for
-automatic undo/redo.
+| Command | Does |
+| --- | --- |
+| `InsertNodeCommand` / `RemoveNodeCommand` | Add or remove a node. |
+| `MoveNodeCommand` / `MoveNodeInTreeCommand` | Move a node by offset, or re-parent it in the tree. |
+| `ReorderNodeCommand` (`ReorderDirection`) | Change z-order (raise/lower/front/back). |
+| `DuplicateNodeCommand` | Duplicate a node with new ids. |
+| `GroupSelectionCommand` / `UngroupCommand` | Group a selection / ungroup a group. |
+| `TranslateManyCommand` | Move many nodes at once. |
 
-- **Contract**: **`Command`**, **`CommandContext`**, **`CommandResult`**, **`ok`**, **`fail`**.
-- **Tree**: **`InsertNodeCommand`**, **`RemoveNodeCommand`**, **`MoveNodeCommand`**,
-  **`MoveNodeInTreeCommand`**, **`ReorderNodeCommand`** (+ **`ReorderDirection`**),
-  **`GroupSelectionCommand`**, **`UngroupCommand`**, **`DuplicateNodeCommand`**.
-- **Properties**: **`SetPropertyCommand`**, **`SetPropertyOnManyCommand`**,
-  **`SetStylePropertyOnManyCommand`**, **`SetCornerRadiusCommand`**,
-  **`SetCustomAttrCommand`**, **`RemoveCustomAttrCommand`**, **`RenameCustomAttrCommand`**.
-- **Transform**: **`RotateNodeCommand`** / **`RotateNodesCommand`** (+ **`RotateNodesEntry`**),
-  **`ResizeNodeCommand`** / **`ResizeNodesCommand`** (+ **`ResizeNodesEntry`**),
-  **`SkewNodeCommand`** / **`SkewNodesCommand`** (+ **`SkewNodesEntry`**),
-  **`FlipNodeCommand`** (+ **`FlipAxis`**), **`TranslateManyCommand`**.
-- **Anchors**: **`MoveAnchorCommand`**, **`InsertAnchorCommand`**,
-  **`RemoveAnchorCommand`**, **`ConvertAnchorTypeCommand`**, **`ConvertNodeToPathCommand`**,
-  **`BatchConvertToPathCommand`**.
-- **Path ops**: **`OffsetPathCommand`**, **`OutlineStrokeCommand`**,
-  **`SimplifyPathCommand`**, **`CleanUpPathCommand`**, **`ReversePathCommand`**,
-  **`JoinPathsCommand`**, **`SplitPathCommand`**, **`KnifeCutPathCommand`**.
-- **Pathfinder**: **`UnionCommand`**, **`IntersectCommand`**, **`SubtractCommand`**,
-  **`ExcludeCommand`**, **`DivideCommand`**.
-- **Live boolean**: **`MakeLiveBooleanCommand`**, **`RefreshLiveBooleanCommand`**,
-  **`ReleaseLiveBooleanCommand`**.
-- **Compound / clip / mask**: **`MakeCompoundPathCommand`**, **`ReleaseCompoundPathCommand`**,
-  **`MakeClipMaskCommand`**, **`ReleaseClipMaskCommand`**.
-- **Layers**: **`MakeLayerCommand`**, **`UnmakeLayerCommand`**, **`CreateLayerCommand`**.
-- **Pages**: **`CreatePageCommand`**, **`DeletePageCommand`**, **`RenamePageCommand`**,
-  **`ResizePageCommand`**, **`MovePageCommand`**, **`SetPageOptionsCommand`**,
-  **`EnsureDefaultPageCommand`**.
-- **Smart objects**: **`MakeSmartObjectCommand`**, **`EditSmartObjectContentsCommand`**,
-  **`ReplaceSmartObjectContentsCommand`**, **`RasterizeSmartObjectCommand`**,
-  **`ReleaseSmartObjectCommand`**, **`RasterizeNodeCommand`**.
-- **Animation**: **`AddKeyframeCommand`**, **`MoveKeyframeCommand`**,
-  **`RemoveKeyframeCommand`**, **`SetKeyframeEasingCommand`**,
-  **`SetAnimationDurationCommand`**, **`RemoveTrackCommand`**.
-- **Snapshots**: **`RestoreSnapshotCommand`**.
+**Transform**
 
-## Services
+| Command | Does |
+| --- | --- |
+| `ResizeNodeCommand` / `ResizeNodesCommand` | Resize one or many nodes (scale baked into geometry). |
+| `RotateNodeCommand` / `RotateNodesCommand` | Rotate around a pivot. |
+| `SkewNodeCommand` / `SkewNodesCommand` | Shear across X/Y around a pivot. |
+| `FlipNodeCommand` (`FlipAxis`) | Mirror horizontally/vertically. |
 
-- **`CommandBus`** — the single mutation entry point; routes through history for
-  automatic undo/redo.
-- **`EditorStateService`** — the document and derived state as signals.
-- **`HistoryService`** — undo/redo stacks.
-- **`SnapshotsService`** — named restorable checkpoints (+ **`Snapshot`**,
-  **`SnapshotSource`**, **`SnapshotsLimits`**, **`DEFAULT_SNAPSHOT_LIMITS`**).
-- **`Disposable`** — the cleanup contract used across registries.
+**Properties**
 
-## Animation (timeline model)
+| Command | Does |
+| --- | --- |
+| `SetPropertyCommand` / `SetPropertyOnManyCommand` | Set a geometry/attribute property on one or many nodes. |
+| `SetStylePropertyOnManyCommand` | Set a style property (fill, stroke, …) across a selection. |
+| `SetCornerRadiusCommand` | Set the non-destructive live-corner radius on a path. |
+| `SetCustomAttrCommand` / `RenameCustomAttrCommand` / `RemoveCustomAttrCommand` | Undoable CRUD for custom `data-*` attributes. |
 
-Pure, headless animation model (the displayed tree is derived; the base document
-is never mutated).
+**Pathfinder (booleans) & paths**
 
-- Model: **`AnimationDoc`**, **`AnimationTrack`**, **`Keyframe`**, **`AnimationSample`**,
-  **`AnimationValue`**, **`ANIMATION_KEY`**; **`emptyAnimationDoc`**, **`isAnimationDoc`**,
-  **`readAnimationDoc`**.
-- Animatable props: **`AnimatablePropertyDef`**, **`AnimatablePropertyGroup`**,
-  **`AnimatablePropertyKind`**, **`animatablePropertiesForNode`**,
-  **`findAnimatableProperty`**, **`readAnimatableValue`**.
-- Easing: **`EasingSpec`**, **`DEFAULT_EASING`**, **`evalEasing`**, **`easingControlPoints`**.
-- Sampling: **`sampleAnimation`**, **`sampleTrack`**, **`applyAnimationToTree`**,
-  **`interpolateValue`**, **`findTrack`**.
-- Editing helpers: **`upsertKeyframe`**, **`moveKeyframe`**, **`removeKeyframe`**,
-  **`setKeyframeEasing`**, **`setAnimationDuration`**, **`removeTrack`**.
-- Export: **`animationToSmil`**.
+| Command | Does |
+| --- | --- |
+| `UnionCommand` / `SubtractCommand` / `IntersectCommand` / `ExcludeCommand` / `DivideCommand` | Boolean operations on shapes. |
+| `MakeLiveBooleanCommand` / `RefreshLiveBooleanCommand` / `ReleaseLiveBooleanCommand` | Non-destructive ("live") booleans you can re-edit later. |
+| `MakeCompoundPathCommand` / `ReleaseCompoundPathCommand` | Combine/release a compound path. |
+| `ConvertNodeToPathCommand` / `BatchConvertToPathCommand` | Convert shapes to editable paths. |
+| `ReversePathCommand` / `SimplifyPathCommand` / `CleanUpPathCommand` / `JoinPathsCommand` / `SplitPathCommand` / `OffsetPathCommand` / `OutlineStrokeCommand` | The Path-menu operations. |
+| `KnifeCutPathCommand` | Cut a path/shape into two along a knife stroke. |
+| `RasterizeNodeCommand` | Replace a vector node with a raster `<image>`. |
+
+**Pages, layers & smart objects**
+
+| Command | Does |
+| --- | --- |
+| `CreatePageCommand` / `DeletePageCommand` / `RenamePageCommand` / `ResizePageCommand` / `MovePageCommand` / `SetPageOptionsCommand` / `EnsureDefaultPageCommand` | Manage pages / artboards. |
+| `CreateLayerCommand` / `MakeLayerCommand` / `UnmakeLayerCommand` | Manage logical layers. |
+| `MakeSmartObjectCommand` / `ReleaseSmartObjectCommand` / `EditSmartObjectContentsCommand` / `ReplaceSmartObjectContentsCommand` | Manage smart objects. |
+| `MakeClipMaskCommand` / `ReleaseClipMaskCommand` | Apply / release a clip path or opacity mask. |
+
+**Animation** (see the animation model below)
+
+| Command | Does |
+| --- | --- |
+| `AddKeyframeCommand` / `MoveKeyframeCommand` / `RemoveKeyframeCommand` / `SetKeyframeEasingCommand` | Edit keyframes on the page animation. |
+| `SetAnimationDurationCommand` / `RemoveTrackCommand` | Set duration / remove a track. |
+| `RestoreSnapshotCommand` | Restore the document to a saved snapshot (see below). |
+
+## History snapshots
+
+Named, restorable checkpoints of the whole document (think Photoshop's History &
+Snapshots). The service is **per-editor**, not global.
+
+| API | Description |
+| --- | --- |
+| `SnapshotsService` | Manage the snapshot collection: `take()`, `restore()`, `rename()`, `delete()`, `setLimits()`, plus `snapshots`/`count`/`currentSnapshotId` signals. |
+| `Snapshot` / `SnapshotSource` | A checkpoint (`name`, `createdAt`, cloned `document`, `thumbnail`, `source`) and how it was created (`manual`, `auto-open`, …). |
+| `SnapshotsLimits` / `DEFAULT_SNAPSHOT_LIMITS` | Tunable bounds (`maxCount`, `autoOnOpen`, `autoOnDestructive`) and their conservative defaults. |
+
+## Animation model
+
+A pure, headless animation model (no UI). It is the shared contract that both the
+timeline preview and the SMIL export build on.
+
+| API | Description |
+| --- | --- |
+| `AnimationDoc` / `AnimationTrack` / `Keyframe` / `EasingSpec` | The immutable animation document, its tracks, keyframes and easing. |
+| `emptyAnimationDoc()` / `readAnimationDoc(node)` / `isAnimationDoc(v)` | Create, read and type-check the animation attached to a page. |
+| `upsertKeyframe` / `moveKeyframe` / `removeKeyframe` / `removeTrack` / `setKeyframeEasing` / `setAnimationDuration` | Immutable editing helpers (the commands above wrap these). |
+| `sampleAnimation(doc, t)` / `sampleTrack` / `applyAnimationToTree(root, doc, t)` | Sample values at a time `t` and produce the animated tree for preview. |
+| `animatablePropertiesForNode(node)` / `findAnimatableProperty` / `readAnimatableValue` | The catalog of animatable properties per node type (the timeline rows). |
+| `animationToSmil(doc)` | Serialize the animation to SVG SMIL `<animate>` elements for export. |
+| `evalEasing` / `easingControlPoints` / `DEFAULT_EASING` | Easing evaluation and presets. |
 
 :::note
-Several of these APIs are not yet listed in the library's `docs/09-api-publica.md`
-— this page reflects the current export surface (the source of truth).
+`core` also exports lower-level geometry primitives (path parsing/serialization,
+stroke outlining, scale-baking, anchor manipulation) that exist to back the
+commands above. They are advanced building blocks rather than everyday APIs — in
+an editor, prefer the commands. The
+[library repository](https://github.com/mosaicoo/svg-engine) is authoritative for
+exact signatures.
 :::
