@@ -49,6 +49,15 @@ export default defineConfig({
           tag: 'meta',
           attrs: { name: 'twitter:image', content: 'https://mosaicoo.github.io/svgengine-site/og.png' },
         },
+        // A11y (WCAG 2.1.1 / 1.4.10): the rehype plugin makes <table>/<pre> focusable
+        // at build time, but Expressive Code renders its own code frames after that
+        // pipeline. This progressive-enhancement script gives any still-unfocusable
+        // code block a tabindex — but only when it actually scrolls (either axis),
+        // re-checked on resize/zoom, so non-scrolling blocks add no extra tab stop.
+        {
+          tag: 'script',
+          content: `(function(){function mark(){document.querySelectorAll('main pre:not([tabindex])').forEach(function(el){if(el.scrollWidth>el.clientWidth+1||el.scrollHeight>el.clientHeight+1){el.setAttribute('tabindex','0');}});}if(document.readyState!=='loading'){mark();}else{document.addEventListener('DOMContentLoaded',mark);}var t;addEventListener('resize',function(){clearTimeout(t);t=setTimeout(mark,200);});})();`,
+        },
       ],
       customCss: ['./src/styles/custom.css'],
       defaultLocale: 'root',
