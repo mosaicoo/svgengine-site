@@ -4,8 +4,8 @@ description: The core concepts behind vector graphics and the svg-engine editor 
 ---
 
 New to vector editing? This page explains the fundamentals you need before
-diving into the [tools](/svgengine-site/using/tools/). If you already use
-Illustrator, Affinity Designer or Figma, these concepts will feel familiar.
+diving into the [tools](/svgengine-site/using/tools/). Every concept is defined
+on its own terms — no prior experience with any editor required.
 
 ## Vector vs. raster
 

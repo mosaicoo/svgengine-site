@@ -17,8 +17,8 @@ where relevant, through the programmatic command API.
 
 ## Geometry
 
-- Path / Anchor editor with three anchor kinds — **cusp**, **smooth** and
-  **symmetric** (Illustrator/Affinity-equivalent behavior).
+- Path / Anchor editor with three anchor kinds — **cusp** (independent handles),
+  **smooth** (aligned handles) and **symmetric** (mirrored handles).
 - Pathfinder boolean operations: Union, Intersect, Subtract, Exclude, Divide.
 - Path operations: simplify, split, join, reverse, outline stroke, offset.
 - Live corners and compound paths.

@@ -3,8 +3,8 @@ title: Page tool
 description: Create and manage pages / artboards.
 ---
 
-**Shortcut: `Shift`+`O`.** The Page tool manages **pages** (artboards) — it
-follows the Illustrator Artboard Tool pattern.
+**Shortcut: `Shift`+`O`.** The Page tool manages **pages** (artboards) —
+multiple independent canvases within a single document.
 
 ## How to use it
 

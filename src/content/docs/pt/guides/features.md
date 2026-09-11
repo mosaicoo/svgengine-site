@@ -17,8 +17,8 @@ editor e, quando faz sentido, pela API programática de comandos.
 
 ## Geometria
 
-- Editor de Path / Anchor com três tipos de anchor — **cusp**, **smooth** e
-  **symmetric** (comportamento equivalente a Illustrator/Affinity).
+- Editor de Path / Anchor com três tipos de anchor — **cusp** (handles
+  independentes), **smooth** (handles alinhados) e **symmetric** (handles espelhados).
 - Operações booleanas do Pathfinder: Union, Intersect, Subtract, Exclude, Divide.
 - Operações de path: simplify, split, join, reverse, outline stroke, offset.
 - Live corners e compound paths.

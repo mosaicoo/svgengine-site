@@ -18,8 +18,8 @@ programática de comandos.
 
 ## Geometría
 
-- Editor de Path / Anchor con tres tipos de anchor — **cusp**, **smooth** y
-  **symmetric** (comportamiento equivalente a Illustrator/Affinity).
+- Editor de Path / Anchor con tres tipos de anchor — **cusp** (handles
+  independientes), **smooth** (handles alineados) y **symmetric** (handles reflejados).
 - Operaciones booleanas del Pathfinder: Union, Intersect, Subtract, Exclude,
   Divide.
 - Operaciones de path: simplify, split, join, reverse, outline stroke, offset.

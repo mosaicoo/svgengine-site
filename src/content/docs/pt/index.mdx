@@ -35,11 +35,10 @@ import { Card, CardGrid, LinkButton, Badge } from '@astrojs/starlight/components
 
 ## Por que o svg-engine?
 
-A maioria das libraries de SVG entrega um **widget caixa-preta** (difícil de
-estender, arrasta a própria UI) ou um **parser/serializer puro** (sem edição,
-sem render, sem UX). O svg-engine fica no meio: um **core de editor extensível
-por plugins**, onde modelo, render, serviços de edição e UI Material são **entry
-points separados**. Você compõe só o que o seu app precisa.
+O svg-engine é um **core de editor extensível por plugins**, onde o modelo de
+dados, o render, os serviços de edição e a UI Material são **entry points
+separados**. Você compõe só o que o seu app precisa — de um renderer read-only a
+um editor profissional completo — e o engine de edição nunca impõe uma UI a você.
 
 <CardGrid>
   <Card title="Headless-first" icon="puzzle">

@@ -52,5 +52,11 @@ npm run lint        # eslint + angular-eslint
 
 ## Segurança
 
-Por favor, relate vulnerabilidades de forma privada, e não em uma issue pública —
-veja a política de segurança do repositório.
+Por favor, relate vulnerabilidades de forma privada, e não em uma issue pública.
+Use o [Private Vulnerability Reporting](https://github.com/mosaicoo/svg-engine/security/policy)
+do GitHub, que é o processo descrito no `SECURITY.md` do repositório.
+
+As advisories conhecidas ficam listadas lá. No release atual, as únicas advisories
+conhecidas estão na cadeia de dependência opcional `@huggingface/transformers`,
+então afetam **apenas** apps que usam o entry point `ai/nlu-voice-wasm` — projetos
+que não usam voz on-device não são afetados.

@@ -5,8 +5,8 @@ description: Los conceptos centrales detrás de los gráficos vectoriales y del 
 
 ¿Nuevo en la edición vectorial? Esta página explica los fundamentos que
 necesitas antes de pasar a las [herramientas](/svgengine-site/es/using/tools/).
-Si ya usas Illustrator, Affinity Designer o Figma, estos conceptos te resultarán
-familiares.
+Cada concepto se define en sus propios términos — no requiere experiencia previa
+con ningún editor.
 
 ## Vector vs. raster
 

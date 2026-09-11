@@ -4,7 +4,7 @@ description: Crie e gerencie páginas / artboards.
 ---
 
 **Atalho: `Shift`+`O`.** A ferramenta Page gerencia **páginas** (artboards) —
-segue o padrão Artboard Tool do Illustrator.
+múltiplas telas independentes dentro de um único documento.
 
 ## Como usar
 
