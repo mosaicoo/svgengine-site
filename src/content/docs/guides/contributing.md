@@ -22,9 +22,12 @@ Common scripts (Angular workspace):
 ```bash
 npm run build:lib   # build the library (ng-packagr)
 npm start           # serve the playground (reference app) on :4200
-npm run test:lib    # run the library test suite
+npm run test:lib    # run the library test suite (build the lib first)
 npm run lint        # eslint + angular-eslint
 ```
+
+`test:lib` runs against the built library, so run `build:lib` before it. Node
+`^20.19 || ^22.12 || >=24` is required (see the package `engines` field).
 
 ## Repository layout
 
@@ -33,21 +36,27 @@ npm run lint        # eslint + angular-eslint
 - `projects/playground/` — the reference app that exercises every consumption
   mode.
 - `projects/svg-studio/` — the standalone studio app (the live demo).
-- `docs/` — architecture, decisions, roadmap, public API and the plugin guide.
+
+The repository's own developer docs live under `docs/` and evolve with the code —
+treat the repository as the source of truth. Start from the
+[`CONTRIBUTING.md`](https://github.com/mosaicoo/svg-engine/blob/main/CONTRIBUTING.md).
 
 ## Ways to contribute
 
 - **Write a plugin** — add a tool, importer/exporter, effect, palette, menu or
   shortcut without touching the core. See [Plugins](/svgengine-site/guides/plugins/).
-- **Report a bug** — open an issue with steps to reproduce.
+- **Report a bug or ask a question** — open an issue; the repository provides
+  issue forms for bug reports, feature requests, documentation and questions.
 - **Improve the docs** — both the library docs and this website.
 
 ## Pull requests
 
 - Branch from `main`, keep changes focused, and make sure `npm run test:lib` and
   `npm run lint` pass.
-- Follow [Conventional Commits](https://www.conventionalcommits.org/)
+- Follow [Conventional Commits](https://www.conventionalcommits.org/) in English
   (`feat:`, `fix:`, `docs:`, `refactor:`, `perf:`, `test:`, `chore:`).
+- PRs are merged by **squash**, so the PR title becomes the commit message — make
+  it a good Conventional Commit line.
 - New behavior should come with tests.
 
 ## Security

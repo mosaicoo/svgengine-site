@@ -22,9 +22,12 @@ Scripts comuns (workspace Angular):
 ```bash
 npm run build:lib   # build da library (ng-packagr)
 npm start           # sobe o playground (app de referência) na :4200
-npm run test:lib    # roda a suíte de testes da library
+npm run test:lib    # roda a suíte de testes da library (buildar a lib antes)
 npm run lint        # eslint + angular-eslint
 ```
+
+O `test:lib` roda contra a library já buildada, então rode o `build:lib` antes.
+É exigido Node `^20.19 || ^22.12 || >=24` (veja o campo `engines` do pacote).
 
 ## Layout do repositório
 
@@ -33,21 +36,27 @@ npm run lint        # eslint + angular-eslint
 - `projects/playground/` — o app de referência que exercita todos os modos de
   consumo.
 - `projects/svg-studio/` — o app studio standalone (a demo ao vivo).
-- `docs/` — arquitetura, decisões, roadmap, API pública e o guia de plugins.
+
+Os docs de desenvolvimento do próprio repositório ficam em `docs/` e evoluem com o
+código — trate o repositório como a fonte da verdade. Comece pelo
+[`CONTRIBUTING.md`](https://github.com/mosaicoo/svg-engine/blob/main/CONTRIBUTING.md).
 
 ## Formas de contribuir
 
 - **Escreva um plugin** — adicione uma tool, importer/exporter, efeito, paleta,
   menu ou atalho sem tocar no core. Veja [Plugins](/svgengine-site/pt/guides/plugins/).
-- **Relate um bug** — abra uma issue com passos para reproduzir.
+- **Relate um bug ou tire uma dúvida** — abra uma issue; o repositório oferece
+  issue forms para bug report, feature request, documentação e perguntas.
 - **Melhore a documentação** — tanto a da library quanto este site.
 
 ## Pull requests
 
 - Crie um branch a partir de `main`, mantenha as mudanças focadas e garanta que
   `npm run test:lib` e `npm run lint` passem.
-- Siga os [Conventional Commits](https://www.conventionalcommits.org/)
+- Siga os [Conventional Commits](https://www.conventionalcommits.org/) em inglês
   (`feat:`, `fix:`, `docs:`, `refactor:`, `perf:`, `test:`, `chore:`).
+- Os PRs são mesclados por **squash**, então o título do PR vira a mensagem do
+  commit — faça dele uma boa linha Conventional Commit.
 - Comportamentos novos devem vir com testes.
 
 ## Segurança

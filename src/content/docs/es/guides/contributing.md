@@ -22,9 +22,13 @@ Scripts comunes (workspace Angular):
 ```bash
 npm run build:lib   # build de la librería (ng-packagr)
 npm start           # levanta el playground (app de referencia) en :4200
-npm run test:lib    # ejecuta la suite de tests de la librería
+npm run test:lib    # ejecuta la suite de tests de la librería (build de la lib antes)
 npm run lint        # eslint + angular-eslint
 ```
+
+`test:lib` corre contra la librería ya compilada, así que ejecuta `build:lib`
+antes. Se requiere Node `^20.19 || ^22.12 || >=24` (mira el campo `engines` del
+paquete).
 
 ## Estructura del repositorio
 
@@ -33,21 +37,27 @@ npm run lint        # eslint + angular-eslint
 - `projects/playground/` — la app de referencia que ejercita todos los modos de
   consumo.
 - `projects/svg-studio/` — la app studio standalone (la demo en vivo).
-- `docs/` — arquitectura, decisiones, roadmap, API pública y la guía de plugins.
+
+Los docs de desarrollo del propio repositorio viven en `docs/` y evolucionan con
+el código — trata el repositorio como la fuente de verdad. Empieza por el
+[`CONTRIBUTING.md`](https://github.com/mosaicoo/svg-engine/blob/main/CONTRIBUTING.md).
 
 ## Formas de contribuir
 
 - **Escribe un plugin** — añade una tool, importer/exporter, efecto, paleta, menú
   o atajo sin tocar el core. Mira [Plugins](/svgengine-site/es/guides/plugins/).
-- **Reporta un bug** — abre un issue con pasos para reproducir.
+- **Reporta un bug o haz una pregunta** — abre un issue; el repositorio ofrece
+  issue forms para bug report, feature request, documentación y preguntas.
 - **Mejora la documentación** — tanto la de la librería como este sitio.
 
 ## Pull requests
 
 - Crea una rama desde `main`, mantén los cambios enfocados y asegúrate de que
   `npm run test:lib` y `npm run lint` pasen.
-- Sigue los [Conventional Commits](https://www.conventionalcommits.org/)
+- Sigue los [Conventional Commits](https://www.conventionalcommits.org/) en inglés
   (`feat:`, `fix:`, `docs:`, `refactor:`, `perf:`, `test:`, `chore:`).
+- Los PRs se fusionan por **squash**, así que el título del PR se convierte en el
+  mensaje del commit — haz de él una buena línea Conventional Commit.
 - El comportamiento nuevo debe venir con tests.
 
 ## Seguridad

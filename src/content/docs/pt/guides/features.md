@@ -80,6 +80,24 @@ Practices.
 O renderer mira **60 fps de pan/zoom com 1.000+ nós**, com uma diretiva opt-in de
 viewport culling para documentos esparsos.
 
+## Requisitos & limitações
+
+Vale saber antes de adotar:
+
+- Os entry points `ui` e `ai/nlu-ui` exigem um **tema Material 3** e o provider de
+  animações no app hospedeiro — o pacote não traz CSS. Veja
+  [Primeiros passos](/svgengine-site/pt/guides/getting-started/#configure-a-ui-material).
+- A **voz on-device** (`ai/nlu-voice-wasm`) depende de um peer **opcional** pesado
+  (`@huggingface/transformers`), carregado lazy só quando usado. Apps que não usam
+  voz nunca o baixam.
+- O **copiar/colar do sistema** exige contexto seguro (HTTPS), um gesto do usuário
+  e permissão de clipboard; sem isso, o editor cai para o clipboard em memória em
+  vez do clipboard do SO.
+- **Carregar plugins externos** exige que o app hospedeiro forneça um module loader
+  e uma allowlist de origem — código de terceiros nunca é carregado implicitamente.
+- A biblioteca é **pré-1.0** (`0.x`): seguindo o SemVer para `0.x`, mudanças
+  breaking podem sair em releases minor e ficam registradas no `CHANGELOG.md`.
+
 :::tip[Experimente]
 Instale o pacote e renderize seu primeiro documento em
 [Primeiros passos](/svgengine-site/pt/guides/getting-started/), ou aprenda a
