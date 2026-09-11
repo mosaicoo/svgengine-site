@@ -2,11 +2,31 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
+// A11y (WCAG 2.1.1 / 1.4.10): horizontally-scrollable tables and code blocks must
+// be reachable by keyboard. Make every <table> and <pre> focusable so keyboard-only
+// users can scroll to content that overflows the viewport.
+function rehypeScrollableFocusable() {
+  return (tree) => {
+    const visit = (node) => {
+      if (!node || typeof node !== 'object') return;
+      if (node.type === 'element' && (node.tagName === 'table' || node.tagName === 'pre')) {
+        node.properties = node.properties || {};
+        if (node.properties.tabIndex == null && node.properties.tabindex == null) {
+          node.properties.tabIndex = 0;
+        }
+      }
+      if (Array.isArray(node.children)) node.children.forEach(visit);
+    };
+    visit(tree);
+  };
+}
+
 // Official website for svg-engine (Astro + Starlight).
 export default defineConfig({
   // GitHub Pages project site: https://mosaicoo.github.io/svgengine-site/
   site: 'https://mosaicoo.github.io',
   base: '/svgengine-site',
+  markdown: { rehypePlugins: [rehypeScrollableFocusable] },
   integrations: [
     starlight({
       title: 'svg-engine',
