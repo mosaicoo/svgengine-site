@@ -8,7 +8,7 @@ description: Install svg-engine and render your first SVG.
 The library is published on npm as the scoped package `@mosaicoo/svg-engine`:
 
 ```bash
-npm install @mosaicoo/svg-engine @angular/core@^21
+npm install @mosaicoo/svg-engine @angular/core@^22
 ```
 
 The `core`, `render`, `io`, `optimize`, `edit` and `ai/nlu` entry points are
@@ -16,8 +16,24 @@ headless — the command above is all they need. The Material UI tier (`ui` and
 `ai/nlu-ui`) has extra peer dependencies:
 
 ```bash
-npm install @angular/material@^21 @angular/cdk@^21 @angular/animations@^21
+npm install @angular/material@^22 @angular/cdk@^22 @angular/animations@^22
 ```
+
+### Choose the version for your Angular
+
+The current release targets **Angular 22**. A maintenance line for **Angular 21**
+stays available — pick the one matching your app:
+
+| Your Angular | Install | Source branch |
+| --- | --- | --- |
+| **22** | `npm install @mosaicoo/svg-engine@latest @angular/core@^22` (0.3.x) | `main` |
+| **21** | `npm install @mosaicoo/svg-engine@^0.2 @angular/core@^21` (0.2.x) | `release/0.2.x` |
+
+`latest` on npm points to the Angular 22 line (`0.3.x`). For Angular 21, pin the
+`0.2.x` range explicitly (there is no separate dist-tag). Node required: `^22.22.3
+|| ^24.15.0 || ^26.0.0` for the Angular 22 line (the 0.2.x line allows Node
+`^20.19 || ^22.12 || >=24`). For the Material UI tier on Angular 21, use the
+matching `@angular/material@^21 @angular/cdk@^21 @angular/animations@^21`.
 
 ## Read-only viewer (example)
 

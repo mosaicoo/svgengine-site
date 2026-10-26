@@ -3,7 +3,8 @@ title: Arquitectura
 description: Cómo está estructurado svg-engine — la frontera headless, las dependencias entre entry points, los modos de consumo y los principios centrales.
 ---
 
-svg-engine es un workspace Angular v21. La librería publicada
+svg-engine es un workspace Angular v22 (con una línea de mantenimiento Angular 21
+en la branch `release/0.2.x`). La librería publicada
 (`@mosaicoo/svg-engine`) se divide en **nueve entry points secundarios** para que
 consumas exactamente la capa que necesitas, con tree-shaking real.
 

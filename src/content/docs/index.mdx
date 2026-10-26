@@ -1,6 +1,6 @@
 ---
 title: svg-engine
-description: Embeddable, headless-first SVG editor for Angular v21. Render, manipulate and optimize SVG — import only what you need.
+description: Embeddable, headless-first SVG editor for Angular v22 (Angular 21 line maintained). Render, manipulate and optimize SVG — import only what you need.
 template: splash
 hero:
   tagline: The embeddable SVG editor for Angular — headless on the inside, professional on the outside.
@@ -26,7 +26,7 @@ hero:
 import { Card, CardGrid, LinkButton, Badge } from '@astrojs/starlight/components';
 
 <div class="hero-badges">
-  <Badge text="Angular v21" variant="note" size="medium" />
+  <Badge text="Angular v22" variant="note" size="medium" />
   <Badge text="Headless-first" variant="tip" size="medium" />
   <Badge text="9 entry points" variant="default" size="medium" />
   <Badge text="Apache-2.0" variant="success" size="medium" />
@@ -136,8 +136,12 @@ all built on the same headless engine.
 Published on npm as the scoped package **`@mosaicoo/svg-engine`**:
 
 ```bash
-npm install @mosaicoo/svg-engine @angular/core@^21
+npm install @mosaicoo/svg-engine @angular/core@^22
 ```
+
+The current release targets **Angular 22**; an **Angular 21** maintenance line
+(`0.2.x`) stays available — see
+[choosing your version](/svgengine-site/guides/getting-started/#choose-the-version-for-your-angular).
 
 Apache-2.0, with just **two runtime dependencies** (`polygon-clipping`, `tslib`);
 Angular Material and the AI/voice packages are **optional** peers. The library

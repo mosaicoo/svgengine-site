@@ -11,17 +11,26 @@ Sim. É licenciado sob **Apache-2.0**, desenvolvido no
 
 ## Está pronto para produção?
 
-Está em **pré-1.0** (a linha `0.1.x`) — a API pública ainda está estabilizando. É
+Está em **pré-1.0** (a linha `0.x`) — a API pública ainda está estabilizando. É
 utilizável hoje, mas espere mudanças antes do `1.0.0`.
 
 ## O que eu preciso para usar?
 
-**Angular v21.** Instale o pacote junto com o Angular:
+**Angular 22** para o release atual. Instale o pacote junto com o Angular:
 
 ```bash
-npm install @mosaicoo/svg-engine @angular/core@^21
+npm install @mosaicoo/svg-engine @angular/core@^22
 ```
 
+Se o seu app ainda está no **Angular 21**, use a linha de manutenção:
+
+```bash
+npm install @mosaicoo/svg-engine@^0.2 @angular/core@^21
+```
+
+O `latest` no npm é a linha Angular 22 (`0.3.x`, branch `main`); a linha Angular 21
+é a `0.2.x` (branch `release/0.2.x`). Veja
+[como escolher a versão](/svgengine-site/pt/guides/getting-started/#escolha-a-versão-para-o-seu-angular).
 Material e CDK só são necessários se você consumir a camada `ui`.
 
 ## Preciso usar o Angular Material?

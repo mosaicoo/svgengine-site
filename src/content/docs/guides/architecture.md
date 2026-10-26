@@ -3,7 +3,8 @@ title: Architecture
 description: How svg-engine is layered — the headless boundary, entry-point dependencies, consumption modes and core principles.
 ---
 
-svg-engine is an Angular v21 workspace. The published library
+svg-engine is an Angular v22 workspace (with an Angular 21 maintenance line on the
+`release/0.2.x` branch). The published library
 (`@mosaicoo/svg-engine`) is split into **nine secondary entry points** so you can
 consume exactly the layer you need, with real tree-shaking.
 

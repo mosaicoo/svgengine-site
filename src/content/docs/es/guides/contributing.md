@@ -27,8 +27,9 @@ npm run lint        # eslint + angular-eslint
 ```
 
 `test:lib` corre contra la librería ya compilada, así que ejecuta `build:lib`
-antes. Se requiere Node `^20.19 || ^22.12 || >=24` (mira el campo `engines` del
-paquete).
+antes. Se requiere Node `^22.22.3 || ^24.15.0 || ^26.0.0` en `main` (línea Angular
+22); la línea Angular 21 (`release/0.2.x`) admite Node `^20.19 || ^22.12 || >=24`.
+Mira el campo `engines` del paquete.
 
 ## Estructura del repositorio
 

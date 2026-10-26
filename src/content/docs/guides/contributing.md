@@ -27,7 +27,9 @@ npm run lint        # eslint + angular-eslint
 ```
 
 `test:lib` runs against the built library, so run `build:lib` before it. Node
-`^20.19 || ^22.12 || >=24` is required (see the package `engines` field).
+`^22.22.3 || ^24.15.0 || ^26.0.0` is required on `main` (the Angular 22 line); the
+Angular 21 line (`release/0.2.x`) allows Node `^20.19 || ^22.12 || >=24`. See the
+package `engines` field.
 
 ## Repository layout
 
